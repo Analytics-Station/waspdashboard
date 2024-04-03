@@ -1,8 +1,16 @@
+import { ThemeProvider } from '@emotion/react';
+import { StyledEngineProvider } from '@mui/material';
+
+import { Layout } from '../components';
+import { MuiCustomTheme } from '../shared';
+
 export function App() {
   return (
-    <div>
-      <div className="tw-h-screen tw-bg-slate-500"></div>
-    </div>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={MuiCustomTheme}>
+        <Layout />
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 
