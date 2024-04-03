@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Auth, SignIn } from '../views';
+import { Auth, Register, SignIn } from '../views';
 
 export const AppRoutes = () => {
   return (
@@ -9,6 +9,7 @@ export const AppRoutes = () => {
       <Route path="/auth" element={<Auth />}>
         <Route path="" element={<Navigate to="signin" />} />
         <Route path="signin" element={<SignIn />} />
+        <Route path="register" element={<Register />} />
       </Route>
     </Routes>
   );

@@ -20,7 +20,7 @@ const FormSchema = yup
   })
   .required();
 
-export const SignIn = () => {
+export const Register = () => {
   const [loading, setLoading] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const {
@@ -45,10 +45,10 @@ export const SignIn = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Container maxWidth="xs">
         <Typography variant="h2" className="tw-font-black tw-text-yellow-400">
-          Sign In
+          Register
         </Typography>
         <Typography variant="h6" className="tw-text-white tw-mb-12">
-          Login to stay connected
+          Sign up with us
         </Typography>
         <Grid container>
           <Grid item sm={12}>
@@ -100,8 +100,8 @@ export const SignIn = () => {
             </LoadingButton>
           </Grid>
           <Grid item sm={12}>
-            <Link to="/auth/register">
-              <Button>Register now</Button>
+            <Link to="/auth/signin">
+              <Button>Login instead</Button>
             </Link>
           </Grid>
         </Grid>
