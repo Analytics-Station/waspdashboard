@@ -22,6 +22,7 @@ import {
   LoginResponse,
   makeRequest,
   RequestMethod,
+  User,
 } from '../../shared';
 
 const FormSchema = yup
@@ -65,7 +66,7 @@ export const SignIn = () => {
         }
       );
       localStorage.setItem(LocalStorageItem.Token, response.message.token);
-      authService.setUserLoggedIn(response.message.user);
+      authService.setUserLoggedIn(new User(response.message.user));
       navigate('/');
     } catch (e) {
       setAlertMessage(`${e}`);

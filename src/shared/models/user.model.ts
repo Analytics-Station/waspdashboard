@@ -1,3 +1,5 @@
+import parsePhoneNumber from 'libphonenumber-js';
+
 export class User {
   public id: string;
   public name: string;
@@ -13,5 +15,13 @@ export class User {
     this.phone = data.phone ? data.phone : null;
     this.profilePic = data.profilePic ? data.profilePic : null;
     this.role = data.role ? data.role : null;
+  }
+
+  getFormattedPhone() {
+    if (!this.phone) {
+      return 'No phone recorded';
+    }
+    const phoneNumber = parsePhoneNumber(this.phone);
+    return phoneNumber ? phoneNumber.formatInternational() : this.phone;
   }
 }

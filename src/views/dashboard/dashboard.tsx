@@ -17,7 +17,7 @@ export const Dashboard = () => {
 
   return (
     <Box className="tw-h-full tw-overflow-y-hidden tw-flex tw-flex-col">
-      <MainAppBar user={authService.loggedUser} />
+      <MainAppBar user={authService.getLoggedUser()} />
       <Box className="tw-flex-1 tw-overflow-y-auto">
         <Outlet />
       </Box>

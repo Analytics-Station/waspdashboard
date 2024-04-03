@@ -1,8 +1,11 @@
 import { makeRequest } from '../helpers';
 import { LocalStorageItem, LoginResponse, User } from '../models';
 
+let loggedUser: User | null = null;
 export class AuthService {
-  loggedUser: User | null = null;
+  getLoggedUser = (): User | null => {
+    return loggedUser;
+  };
 
   isUserLoggedIn = (): boolean => {
     const logged = localStorage.getItem(LocalStorageItem.Logged);
@@ -12,7 +15,7 @@ export class AuthService {
   setUserLoggedIn = (user?: User) => {
     localStorage.setItem(LocalStorageItem.Logged, '1');
     if (user) {
-      this.loggedUser = user;
+      loggedUser = user;
     }
   };
 
@@ -27,15 +30,17 @@ export class AuthService {
     try {
       const response = await makeRequest<null, LoginResponse>('/auth/validate');
       localStorage.setItem(LocalStorageItem.Token, response.message.token);
-      this.loggedUser = new User(response.message.user);
-      return Promise.resolve(this.loggedUser);
+      loggedUser = new User(response.message.user);
+      this.setUserLoggedIn(loggedUser);
+      return Promise.resolve(loggedUser);
     } catch (e) {
       this.logoutUser();
       return Promise.reject(e);
     }
   };
 
-  logoutUser = () => {
+  logoutUser = async () => {
     localStorage.clear();
+    return Promise.resolve();
   };
 }
