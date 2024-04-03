@@ -1,0 +1,53 @@
+name: CI dev
+on:
+  push:
+    branches: [develop]
+jobs:
+  deploy:
+    name: Deploy to Develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: 'develop'
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.12.0'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci --omit=dev
+          npm install
+
+      - name: Build NX project
+        uses: mansagroup/nrwl-nx-action@v3
+        env:
+          VITE_API_URL: ${{ env.VITE_API_URL_DEV }}
+        with:
+          targets: build
+          projects: website
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Copy files to the production website with the AWS CLI
+        run: |
+          aws s3 sync --delete ${{ env.DIST_FOLDER }} s3://${{ env.S3_BUCKET_DEV }}
+
+      - name: Invalidate cloudfront caches
+        run: |
+          export AWS_PAGER=""
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DIST_ID_DEV }} \
+            --paths "/*"

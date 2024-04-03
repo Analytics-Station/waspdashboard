@@ -39,7 +39,7 @@ export const Auth = () => {
       <Container maxWidth="xxl" className="tw-h-full tw-relative tw-z-10">
         <Grid container className="tw-h-full tw-items-center">
           <Grid item sm={6} className="tw-bg-white tw-text-center">
-            <img src="./images/logo.png" alt="Wasp" />
+            <img src="./images/logo.webp" alt="Wasp" className="tw-w-full" />
           </Grid>
           <Grid item sm={6} className="tw-text-center">
             <Outlet />
