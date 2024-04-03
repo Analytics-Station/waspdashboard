@@ -9,6 +9,7 @@ import {
   Avatar,
   Box,
   Button,
+  Container,
   Divider,
   IconButton,
   Menu,
@@ -101,79 +102,90 @@ export const MainAppBar = ({ user }: Props) => {
   }));
 
   return (
-    <AppBar
-      elevation={0}
-      color="inherit"
-      position="relative"
-      style={{
-        backdropFilter: 'blur(6px)',
-      }}
-      className="tw-bg-slate-100"
-    >
-      <Toolbar>
-        <Link to="/">
-          <Typography
-            variant="h6"
-            className="tw-font-black tw-text-yellow-500 tw-mr-4"
-          >
-            WASP
-          </Typography>
-        </Link>
-        <Divider
-          orientation="vertical"
-          variant="middle"
-          flexItem
-          className="tw-h-6 tw-self-center"
-        />
-        {pages.map((page) => (
-          <Link to={page.url} key={page.label}>
-            <Button
-              size="small"
-              color="secondary"
-              className="tw-ml-4"
-              startIcon={
-                <FontAwesomeIcon icon={page.icon} color="#1877f2" size="xs" />
-              }
-            >
-              {page.label}
-            </Button>
-          </Link>
-        ))}
-        <Tooltip title="Profile" className="tw-ml-auto">
-          <IconButton size="small" onClick={handleClick}>
-            <Avatar alt="Profile picture" src="./images/avatar_default.jpg" />
-          </IconButton>
-        </Tooltip>
-      </Toolbar>
-      {user && (
-        <StyledMenu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
+    <Box className="tw-bg-slate-100">
+      <Container maxWidth="xxl">
+        <AppBar
           elevation={0}
-          className="tw-p-2"
+          color="inherit"
+          position="relative"
+          style={{
+            backdropFilter: 'blur(6px)',
+          }}
+          className="tw-bg-slate-100"
         >
-          <Box>
-            <Typography variant="subtitle2">
-              <b>{user.name}</b>
-            </Typography>
-            <Typography variant="subtitle2">
-              {user.getFormattedPhone()}
-            </Typography>
-          </Box>
-          <Divider />
-          <MenuItem onClick={handleClose}>
-            <Typography variant="subtitle2">My profile</Typography>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Typography variant="subtitle2">Preferences</Typography>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={logoutClicked}>
-            <Typography variant="subtitle2">Logout</Typography>
-          </MenuItem>
-        </StyledMenu>
-      )}
-    </AppBar>
+          <Toolbar>
+            <Link to="/">
+              <Typography
+                variant="h6"
+                className="tw-font-black tw-text-yellow-500 tw-mr-4"
+              >
+                WASP
+              </Typography>
+            </Link>
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              flexItem
+              className="tw-h-6 tw-self-center"
+            />
+            {pages.map((page) => (
+              <Link to={page.url} key={page.label}>
+                <Button
+                  size="small"
+                  color="secondary"
+                  className="tw-ml-4"
+                  startIcon={
+                    <FontAwesomeIcon
+                      icon={page.icon}
+                      color="#1877f2"
+                      size="xs"
+                    />
+                  }
+                >
+                  {page.label}
+                </Button>
+              </Link>
+            ))}
+            <Tooltip title="Profile" className="tw-ml-auto">
+              <IconButton size="small" onClick={handleClick}>
+                <Avatar
+                  alt="Profile picture"
+                  src="./images/avatar_default.jpg"
+                />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+          {user && (
+            <StyledMenu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              elevation={0}
+              className="tw-p-2"
+            >
+              <Box>
+                <Typography variant="subtitle2">
+                  <b>{user.name}</b>
+                </Typography>
+                <Typography variant="subtitle2">
+                  {user.getFormattedPhone()}
+                </Typography>
+              </Box>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <Typography variant="subtitle2">My profile</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Typography variant="subtitle2">Preferences</Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={logoutClicked}>
+                <Typography variant="subtitle2">Logout</Typography>
+              </MenuItem>
+            </StyledMenu>
+          )}
+        </AppBar>
+      </Container>
+    </Box>
   );
 };
