@@ -1,9 +1,7 @@
-import NxWelcome from './nx-welcome';
-
 export function App() {
   return (
     <div>
-      <NxWelcome title="waspdashboard" />
+      <div className="tw-h-screen tw-bg-slate-500"></div>
     </div>
   );
 }
