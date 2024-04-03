@@ -1,7 +1,36 @@
 import { Container, Grid } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+
+import { AuthService, LocalStorageItem } from '../../shared';
 
 export const Auth = () => {
+  const navigate = useNavigate();
+  const authService = new AuthService();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    checkUserLogged();
+  }, []);
+
+  const checkUserLogged = async () => {
+    const token = localStorage.getItem(LocalStorageItem.Token);
+    if (token) {
+      try {
+        await authService.verifyToken();
+        navigate('/');
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    setLoading(false);
+  };
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <Container maxWidth={false} className="tw-h-full tw-bg-white">
       <Grid container className="tw-h-full tw-fixed tw-bg-blue-600 tw-z-0">

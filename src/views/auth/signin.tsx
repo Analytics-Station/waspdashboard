@@ -1,13 +1,9 @@
-import {
-  faCheckDouble,
-  faTriangleExclamation,
-} from '@fortawesome/free-solid-svg-icons';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
-  AlertColor,
   Button,
   Container,
   Grid,
@@ -16,15 +12,17 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { makeRequest, RequestMethod } from '../../shared';
-
-interface FormSchemaType {
-  email: string;
-  password: string;
-}
+import {
+  AuthService,
+  LocalStorageItem,
+  LoginRequest,
+  LoginResponse,
+  makeRequest,
+  RequestMethod,
+} from '../../shared';
 
 const FormSchema = yup
   .object({
@@ -34,9 +32,10 @@ const FormSchema = yup
   .required();
 
 export const SignIn = () => {
+  const navigate = useNavigate();
+  const authService = new AuthService();
+
   const [loading, setLoading] = useState(false);
-  const [disableSubmit, setDisableSubmit] = useState(false);
-  const [alertType, setAlertType] = useState<AlertColor>('info');
   const [alertMessage, setAlertMessage] = useState('');
 
   const {
@@ -54,26 +53,26 @@ export const SignIn = () => {
   });
 
   const onSubmit = async (data: any) => {
-    setDisableSubmit(true);
-    setLoading(true);
     setLoading(true);
     try {
-      const response = await makeRequest<FormSchemaType, string>(
+      const response = await makeRequest<LoginRequest, LoginResponse>(
         '/auth/signin',
         RequestMethod.POST,
+        false,
         {
           email: data.email,
           password: data.password,
         }
       );
-      // setAlertMessage(response.message);
-      setAlertType('info');
+      localStorage.setItem(LocalStorageItem.Token, response.message.token);
+      authService.setUserLoggedIn(response.message.user);
+      navigate('/');
     } catch (e) {
-      setAlertType('error');
-      // setAlertMessage(`${e}`);
+      setAlertMessage(`${e}`);
     }
     setLoading(false);
     setValue('email', '');
+    setValue('password', '');
     setTimeout(() => {
       setAlertMessage('');
     }, 5000);
@@ -137,24 +136,13 @@ export const SignIn = () => {
           <Grid item sm={12}>
             <Alert
               variant="outlined"
-              color={alertType}
               icon={
                 <FontAwesomeIcon
-                  icon={
-                    alertType === 'info' ? faCheckDouble : faTriangleExclamation
-                  }
-                  className={
-                    alertType === 'info'
-                      ? 'tw-text-cyan-200'
-                      : 'tw-text-red-600'
-                  }
+                  icon={faTriangleExclamation}
+                  className="tw-text-white"
                 />
               }
-              className={`tw-my-4 tw-font-semibold tw-transition-transform tw-duration-500 tw-ease-in-out tw-z-0 ${
-                alertType === 'info'
-                  ? 'tw-border-cyan-200 tw-text-cyan-200'
-                  : 'tw-border-red-600 tw-text-red-600'
-              } ${
+              className={`tw-my-4 tw-font-semibold tw-transition-transform tw-duration-500 tw-ease-in-out tw-z-0 tw-border-white tw-text-white ${
                 alertMessage.length
                   ? 'tw-opacity-100 tw--translate-y-0'
                   : 'tw-opacity-0 tw--translate-y-10'
@@ -165,7 +153,7 @@ export const SignIn = () => {
           </Grid>
           <Grid item sm={12}>
             <LoadingButton
-              disabled={!isValid || !isDirty || disableSubmit}
+              disabled={!isValid || !isDirty}
               size="large"
               variant="contained"
               className="tw-w-3/4 tw-font-bold tw-mb-12"

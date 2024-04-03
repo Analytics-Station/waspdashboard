@@ -1,6 +1,11 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosHeaders,
+  AxiosInstance,
+  AxiosRequestConfig,
+} from 'axios';
 
-import { AppResponse, RequestMethod } from '../models';
+import { AppResponse, LocalStorageItem, RequestMethod } from '../models';
 
 const getAxiosRequest = (): AxiosInstance => {
   return axios.create({
@@ -11,13 +16,20 @@ const getAxiosRequest = (): AxiosInstance => {
 export const makeRequest = async <RequestType, ResponseType>(
   URL: string,
   method: RequestMethod = RequestMethod.GET,
+  validate = true,
   data?: RequestType
 ): Promise<AppResponse<ResponseType>> => {
   try {
+    const headers = new AxiosHeaders({});
+    const token = localStorage.getItem(LocalStorageItem.Token);
+    if (validate && token) {
+      headers.set('Authorization', `${token}`);
+    }
     const config: AxiosRequestConfig = {
       method,
       url: URL,
       data,
+      headers,
     };
     if (method === RequestMethod.GET) {
       config.params = data;

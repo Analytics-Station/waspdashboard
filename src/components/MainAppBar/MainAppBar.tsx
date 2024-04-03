@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { User } from 'src/shared';
 
 interface MenuItem {
   label: string;
@@ -22,7 +23,11 @@ interface MenuItem {
   url: string;
 }
 
-export const MainAppBar = () => {
+interface Props {
+  user: User | null;
+}
+
+export const MainAppBar = ({ user }: Props) => {
   const pages: MenuItem[] = [
     {
       label: 'Contacts',
@@ -39,14 +44,14 @@ export const MainAppBar = () => {
     <AppBar
       elevation={0}
       color="inherit"
-      position="fixed"
+      position="relative"
       style={{
         backdropFilter: 'blur(6px)',
       }}
       className="tw-bg-slate-100"
     >
       <Toolbar>
-        <Link to="/dashboard">
+        <Link to="/">
           <Typography
             variant="h6"
             className="tw-font-black tw-text-yellow-500 tw-mr-4"
@@ -61,7 +66,7 @@ export const MainAppBar = () => {
           className="tw-h-6 tw-self-center"
         />
         {pages.map((page) => (
-          <Link to={`/dashboard${page.url}`} key={page.label}>
+          <Link to={page.url} key={page.label}>
             <Button
               size="small"
               color="secondary"
