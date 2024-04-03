@@ -29,7 +29,6 @@ jobs:
           VITE_API_URL: ${{ vars.VITE_API_URL_DEV }}
         with:
           targets: build
-          projects: website
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
