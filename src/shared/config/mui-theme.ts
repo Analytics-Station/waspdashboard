@@ -51,7 +51,7 @@ export const MuiCustomTheme = createTheme({
         root: {
           textTransform: 'none',
           '&.MuiButton-contained.Mui-disabled': {
-            backgroundColor: '#0D0D0D',
+            backgroundColor: '#cecece',
             color: '#59656F',
           },
         },
@@ -61,7 +61,7 @@ export const MuiCustomTheme = createTheme({
       styleOverrides: {
         root: {
           '&.MuiIconButton-root.Mui-disabled': {
-            color: '#59656F',
+            // color: '#59656F',
           },
         },
       },
