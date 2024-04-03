@@ -1,6 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Auth, Dashboard, Home, Register, SignIn } from '../views';
+import {
+  Auth,
+  Broadcast,
+  Contacts,
+  Dashboard,
+  Home,
+  Register,
+  SignIn,
+} from '../views';
 
 export const AppRoutes = () => {
   return (
@@ -13,8 +21,9 @@ export const AppRoutes = () => {
       </Route>
 
       <Route path="/dashboard" element={<Dashboard />}>
-        <Route path="" element={<Navigate to="home" />} />
-        <Route path="home" element={<Home />} />
+        <Route path="" element={<Home />} />
+        <Route path="contacts" element={<Contacts />} />
+        <Route path="broadcast" element={<Broadcast />} />
       </Route>
     </Routes>
   );
