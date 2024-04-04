@@ -2,6 +2,8 @@ name: CI dev
 on:
   push:
     branches: [develop]
+env:
+  VITE_API_URL: ${{ vars.VITE_API_URL_DEV }}
 jobs:
   deploy:
     name: Deploy to Develop
