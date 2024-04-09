@@ -141,6 +141,15 @@ export const MuiCustomTheme = createTheme({
         },
       },
     },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          '.Mui-selected': {
+            backgroundColor: '#f8c70f88 !important',
+          },
+        },
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: {

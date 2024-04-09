@@ -14,7 +14,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 interface MenuLink {
   label: string;
@@ -23,31 +23,41 @@ interface MenuLink {
 }
 
 export const Broadcast = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const links: MenuLink[] = [
     {
       label: 'Broadcast history',
-      url: '/broadcast/history',
+      url: '/broadcasts/history',
       icon: faClock,
     },
     {
       label: 'Scheduled Broadcasts',
-      url: '/broadcast/scheduled',
+      url: '/broadcasts/scheduled',
       icon: faBusinessTime,
     },
     {
       label: 'Template messages',
-      url: '/broadcast/templates',
+      url: '/broadcasts/templates',
       icon: faFile,
     },
   ];
 
+  const isItemActive = (url: string | undefined): boolean => {
+    return url ? location.pathname.startsWith(url) : false;
+  };
+
   return (
-    <Container maxWidth="xxl" className="tw-flex tw-h-full">
+    <Container maxWidth="xxl" className="tw-flex tw-h-full" disableGutters>
       <Box className="tw-w-56">
         <List className="tw-py-0">
           {links.map((link) => (
-            <ListItemButton key={link.label} onClick={() => navigate(link.url)}>
+            <ListItemButton
+              key={link.label}
+              component={Link}
+              to={link.url}
+              selected={isItemActive(link.url)}
+            >
               <ListItemIcon>
                 <FontAwesomeIcon fixedWidth icon={link.icon} />
               </ListItemIcon>

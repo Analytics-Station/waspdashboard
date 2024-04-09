@@ -8,7 +8,6 @@ import {
   BroadcastTemplates,
   Contacts,
   Dashboard,
-  Home,
   Register,
   SignIn,
 } from '../views';
@@ -23,9 +22,9 @@ export const AppRoutes = () => {
       </Route>
 
       <Route path="" element={<Dashboard />}>
-        <Route path="" element={<Home />} />
+        <Route path="" element={<Navigate to="contacts" />} />
         <Route path="contacts" element={<Contacts />} />
-        <Route path="broadcast" element={<Broadcast />}>
+        <Route path="broadcasts" element={<Broadcast />}>
           <Route path="" element={<Navigate to="history" />} />
           <Route path="history" element={<BroadcastHistory />} />
           <Route path="scheduled" element={<BroadcastScheduled />} />

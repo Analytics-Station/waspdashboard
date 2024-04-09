@@ -47,7 +47,7 @@ export const MainAppBar = ({ user }: Props) => {
     {
       label: 'Broadcast',
       icon: faBullhorn,
-      url: '/broadcast',
+      url: '/broadcasts',
     },
   ];
 
