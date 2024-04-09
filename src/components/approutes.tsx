@@ -3,6 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   Auth,
   Broadcast,
+  BroadcastHistory,
+  BroadcastScheduled,
+  BroadcastTemplates,
   Contacts,
   Dashboard,
   Home,
@@ -22,7 +25,12 @@ export const AppRoutes = () => {
       <Route path="" element={<Dashboard />}>
         <Route path="" element={<Home />} />
         <Route path="contacts" element={<Contacts />} />
-        <Route path="broadcast" element={<Broadcast />} />
+        <Route path="broadcast" element={<Broadcast />}>
+          <Route path="" element={<Navigate to="history" />} />
+          <Route path="history" element={<BroadcastHistory />} />
+          <Route path="scheduled" element={<BroadcastScheduled />} />
+          <Route path="templates" element={<BroadcastTemplates />} />
+        </Route>
       </Route>
     </Routes>
   );

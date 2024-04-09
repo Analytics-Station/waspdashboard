@@ -6,6 +6,8 @@ declare module '@mui/material/styles' {
   }
 }
 
+const rootElement = () => document.getElementById('root');
+
 export const MuiCustomTheme = createTheme({
   breakpoints: {
     values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536, xxl: 1800 },
@@ -93,7 +95,7 @@ export const MuiCustomTheme = createTheme({
           },
           '& fieldset': {
             borderColor: '#bdc3c7',
-            borderRadius: '12px',
+            borderRadius: '8px',
           },
           '&:hover fieldset': {
             borderColor: '#2c3e50',
@@ -156,7 +158,7 @@ export const MuiCustomTheme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: 20,
+          borderRadius: 12,
           boxShadow: 'none',
         },
         root: {
@@ -168,6 +170,9 @@ export const MuiCustomTheme = createTheme({
             padding: '1rem',
           },
         },
+      },
+      defaultProps: {
+        container: rootElement,
       },
     },
     MuiPopover: {
