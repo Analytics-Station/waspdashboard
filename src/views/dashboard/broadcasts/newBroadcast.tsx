@@ -23,6 +23,7 @@ import {
   ContactResponse,
   makeRequest,
   PaginationMeta,
+  RequestMethod,
 } from '../../../shared';
 
 interface Props {
@@ -48,7 +49,7 @@ export const NewBroadcast = ({ open, onCloseClicked }: Props) => {
     mode: 'all',
     defaultValues: {
       broadcastName: '',
-      templateId: '',
+      templateId: 'hello_world',
       contacts: [],
     },
     resolver: yupResolver(FormSchema),
@@ -73,7 +74,35 @@ export const NewBroadcast = ({ open, onCloseClicked }: Props) => {
   };
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    setLoading(true);
+    try {
+      const response = await makeRequest(
+        '/broadcasts',
+        RequestMethod.POST,
+        false,
+        {
+          broadcastName: data.broadcastName,
+          templateId: 'hello_world',
+          contacts: data.contacts,
+        }
+      );
+      onClose();
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+    resetForm();
+  };
+
+  const onClose = () => {
+    resetForm();
+    onCloseClicked();
+  };
+
+  const resetForm = () => {
+    setValue('broadcastName', '');
+    setValue('templateId', '');
+    setValue('contacts', []);
   };
 
   return (
@@ -125,6 +154,7 @@ export const NewBroadcast = ({ open, onCloseClicked }: Props) => {
                     error={!!errors.broadcastName}
                     fullWidth
                     placeholder="Template name"
+                    readOnly
                   />
                 </FormControl>
               )}

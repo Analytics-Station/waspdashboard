@@ -1,3 +1,5 @@
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
@@ -5,6 +7,7 @@ import {
   Container,
   FormControl,
   Grid,
+  IconButton,
   OutlinedInput,
   Typography,
 } from '@mui/material';
@@ -15,11 +18,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
+import { DeleteDialog } from '../../../components';
 import {
   Contact,
   ContactResponse,
   makeRequest,
   PaginationMeta,
+  RequestMethod,
 } from '../../../shared';
 import { NewContact } from './newContact';
 
@@ -50,6 +55,9 @@ export const Contacts = () => {
   );
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [showNewContact, setShowNewContact] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
   useEffect(() => {
     fetchContacts();
@@ -61,6 +69,21 @@ export const Contacts = () => {
     );
     const message = new ContactResponse(response.message);
     setContacts(message.list);
+  };
+
+  const deleteContact = async () => {
+    setLoading(true);
+    try {
+      const response = await makeRequest<null, null>(
+        `/contacts/${selectedContact?.id}`,
+        RequestMethod.DELETE
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    fetchContacts();
+    setLoading(false);
+    setShowDeleteDialog(false);
   };
 
   return (
@@ -108,6 +131,11 @@ export const Contacts = () => {
       </Box>
 
       <DataGrid
+        sx={{
+          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+            outline: 'none !important',
+          },
+        }}
         autoHeight
         columns={[
           {
@@ -144,6 +172,22 @@ export const Contacts = () => {
             },
             flex: 1,
           },
+          {
+            field: 'Actions',
+            renderCell: (params) => (
+              <IconButton
+                color="error"
+                size="small"
+                onClick={() => {
+                  setSelectedContact(params.row);
+                  setShowDeleteDialog(true);
+                }}
+              >
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </IconButton>
+            ),
+            flex: 1,
+          },
         ]}
         rows={contacts}
         initialState={{
@@ -172,6 +216,15 @@ export const Contacts = () => {
           setShowNewContact(false);
           fetchContacts();
         }}
+      />
+
+      <DeleteDialog
+        title="Delete contact"
+        subtitle={`Are you sure you want to delete ${selectedContact?.name}?`}
+        open={showDeleteDialog}
+        onCancelClicked={() => setShowDeleteDialog(false)}
+        onDeleteClicked={() => deleteContact()}
+        loading={loading}
       />
     </Container>
   );

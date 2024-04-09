@@ -4,3 +4,4 @@ export * from './auth.model';
 export * from './user.model';
 export * from './contact.model';
 export * from './pagination.model';
+export * from './broadcast.model';
