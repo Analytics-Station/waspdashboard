@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
+  Button,
   Container,
   FormControl,
   Grid,
@@ -20,6 +21,7 @@ import {
   makeRequest,
   PaginationMeta,
 } from '../../../shared';
+import { NewContact } from './newContact';
 
 const FormSchema = yup
   .object({
@@ -47,6 +49,7 @@ export const Contacts = () => {
     new PaginationMeta({})
   );
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [showNewContact, setShowNewContact] = useState(false);
 
   useEffect(() => {
     fetchContacts();
@@ -71,7 +74,7 @@ export const Contacts = () => {
       </Typography>
 
       <Box className="tw-bg-slate-100 tw-p-6 tw-mt-8 tw-mb-4 tw-rounded-lg">
-        <Grid container>
+        <Grid container justifyContent="space-between">
           <Grid item sm={3}>
             <Controller
               name="query"
@@ -91,6 +94,15 @@ export const Contacts = () => {
                 </FormControl>
               )}
             />
+          </Grid>
+          <Grid item sm={3} className="tw-text-right">
+            <Button
+              variant="contained"
+              disableElevation
+              onClick={() => setShowNewContact(true)}
+            >
+              New Contact
+            </Button>
           </Grid>
         </Grid>
       </Box>
@@ -152,6 +164,14 @@ export const Contacts = () => {
           );
         }}
         pageSizeOptions={[10, 20, 50, 100]}
+      />
+
+      <NewContact
+        open={showNewContact}
+        onCloseClicked={() => {
+          setShowNewContact(false);
+          fetchContacts();
+        }}
       />
     </Container>
   );
