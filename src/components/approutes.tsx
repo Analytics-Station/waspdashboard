@@ -6,6 +6,8 @@ import {
   BroadcastHistory,
   BroadcastScheduled,
   BroadcastTemplates,
+  BulkImportContacts,
+  ContactList,
   Contacts,
   Dashboard,
   Register,
@@ -23,7 +25,10 @@ export const AppRoutes = () => {
 
       <Route path="" element={<Dashboard />}>
         <Route path="" element={<Navigate to="contacts" />} />
-        <Route path="contacts" element={<Contacts />} />
+        <Route path="contacts" element={<Contacts />}>
+          <Route path="" element={<ContactList />} />
+          <Route path="bulk-import" element={<BulkImportContacts />} />
+        </Route>
         <Route path="broadcasts" element={<Broadcast />}>
           <Route path="" element={<Navigate to="history" />} />
           <Route path="history" element={<BroadcastHistory />} />

@@ -61,7 +61,7 @@ export const MainAppBar = ({ user }: Props) => {
   };
 
   const logoutClicked = async () => {
-    await authService.logoutUser();
+    await authService.logoutUser(navigate);
     navigate('/auth/signin');
   };
 

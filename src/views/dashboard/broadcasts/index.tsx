@@ -14,7 +14,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 interface MenuLink {
   label: string;
@@ -24,7 +24,6 @@ interface MenuLink {
 
 export const Broadcast = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const links: MenuLink[] = [
     {
       label: 'Broadcast history',

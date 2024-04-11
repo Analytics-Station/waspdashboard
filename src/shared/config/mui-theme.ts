@@ -36,6 +36,7 @@ export const MuiCustomTheme = createTheme({
     },
     success: {
       main: '#27ae60',
+      contrastText: '#FAFAFA',
     },
     warning: {
       main: '#f39c12',

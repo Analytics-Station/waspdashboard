@@ -1,10 +1,11 @@
 import { Container, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { AuthService, LocalStorageItem } from '../../shared';
 
 export const Auth = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const authService = new AuthService();
 
@@ -18,8 +19,7 @@ export const Auth = () => {
     const token = localStorage.getItem(LocalStorageItem.Token);
     if (token) {
       try {
-        await authService.verifyToken();
-        navigate('/');
+        await authService.verifyToken(navigate, location);
       } catch (e) {
         console.log(e);
       }

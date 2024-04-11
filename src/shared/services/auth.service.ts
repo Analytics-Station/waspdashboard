@@ -1,46 +1,45 @@
+import { Location, NavigateFunction } from 'react-router-dom';
+
 import { makeRequest } from '../helpers';
 import { LocalStorageItem, LoginResponse, User } from '../models';
 
-let loggedUser: User | null = null;
 export class AuthService {
-  getLoggedUser = (): User | null => {
-    return loggedUser;
-  };
-
   isUserLoggedIn = (): boolean => {
     const logged = localStorage.getItem(LocalStorageItem.Logged);
     return logged ? parseInt(logged) === 1 : false;
   };
 
-  setUserLoggedIn = (user?: User) => {
+  setUserLoggedIn = () => {
     localStorage.setItem(LocalStorageItem.Logged, '1');
-    if (user) {
-      loggedUser = user;
-    }
   };
 
-  verifyToken = async () => {
+  verifyToken = async (navigate: NavigateFunction, location: Location) => {
     const waspToken = localStorage.getItem(LocalStorageItem.Token);
-
     if (!waspToken) {
-      localStorage.removeItem(LocalStorageItem.Logged);
+      this.logoutUser(navigate);
       return Promise.reject();
     }
-
     try {
       const response = await makeRequest<null, LoginResponse>('/auth/validate');
       localStorage.setItem(LocalStorageItem.Token, response.message.token);
-      loggedUser = new User(response.message.user);
-      this.setUserLoggedIn(loggedUser);
-      return Promise.resolve(loggedUser);
+      this.setUserLoggedIn();
+      if (this.isAuthRoute(location.pathname)) {
+        navigate('/');
+      }
+      return Promise.resolve(new User(response.message.user));
     } catch (e) {
-      this.logoutUser();
+      this.logoutUser(navigate);
       return Promise.reject(e);
     }
   };
 
-  logoutUser = async () => {
+  isAuthRoute = (route: string) => {
+    const routeChunks = route.split('/');
+    return routeChunks.length > 1 && routeChunks[1] === 'auth';
+  };
+
+  logoutUser = async (navigate: NavigateFunction) => {
     localStorage.clear();
-    return Promise.resolve();
+    navigate('/auth/signin');
   };
 }
