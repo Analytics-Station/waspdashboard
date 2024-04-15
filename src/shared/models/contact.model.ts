@@ -29,3 +29,13 @@ export class ContactResponse {
       : new PaginationMeta({});
   }
 }
+
+export class ProcessContactResponse {
+  public contacts: Contact[];
+
+  constructor(data: any) {
+    this.contacts = data.contacts
+      ? data.contacts.map((item: any) => new Contact(item))
+      : [];
+  }
+}

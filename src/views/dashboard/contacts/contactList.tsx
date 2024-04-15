@@ -231,6 +231,9 @@ export const ContactList = () => {
           setShowNewContact(false);
           fetchContacts();
         }}
+        contactSaved={() => {
+          fetchContacts();
+        }}
       />
 
       <DeleteDialog

@@ -25,6 +25,7 @@ jobs:
         uses: mansagroup/nrwl-nx-action@v3
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL_DEV }}
+          VITE_CONTACTS_BULK_TEMPLATE: ${{ vars.VITE_CONTACTS_BULK_TEMPLATE }}
         with:
           targets: build
           all: 'true'

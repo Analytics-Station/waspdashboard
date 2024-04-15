@@ -21,6 +21,7 @@ import { makeRequest, RequestMethod } from '../../../shared';
 
 interface Props {
   open: boolean;
+  contactSaved: () => void;
   onCloseClicked: () => void;
 }
 
@@ -32,7 +33,7 @@ const FormSchema = yup
   })
   .required();
 
-export const NewContact = ({ open, onCloseClicked }: Props) => {
+export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
   const {
     handleSubmit,
     control,
@@ -58,9 +59,13 @@ export const NewContact = ({ open, onCloseClicked }: Props) => {
         RequestMethod.POST,
         false,
         {
-          name: data.name,
-          phone: data.phone,
-          broadcast: data.broadcast,
+          contacts: [
+            {
+              name: data.name,
+              phone: data.phone,
+              broadcast: data.broadcast,
+            },
+          ],
         }
       );
       onClose();
@@ -69,6 +74,7 @@ export const NewContact = ({ open, onCloseClicked }: Props) => {
     }
     setLoading(false);
     resetForm();
+    contactSaved();
   };
 
   const onClose = () => {
