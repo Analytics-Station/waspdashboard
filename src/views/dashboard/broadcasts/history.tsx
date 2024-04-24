@@ -2,6 +2,7 @@ import { Box, Button, Container } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Broadcast,
@@ -9,10 +10,8 @@ import {
   makeRequest,
   PaginationMeta,
 } from '../../../shared';
-import { NewBroadcast } from './newBroadcast';
 
 export const BroadcastHistory = () => {
-  const [showNewBroadcast, setShowNewBroadcast] = useState(false);
   const [pagination, setPagination] = useState<PaginationMeta>(
     new PaginationMeta({})
   );
@@ -33,13 +32,11 @@ export const BroadcastHistory = () => {
   return (
     <Container maxWidth="xxl" className="tw-h-full tw-overflow-y-auto tw-py-12">
       <Box className="tw-flex tw-flex-col tw-items-end tw-mb-4">
-        <Button
-          disableElevation
-          variant="contained"
-          onClick={() => setShowNewBroadcast(true)}
-        >
-          New Broadcast
-        </Button>
+        <Link to="/broadcasts/new">
+          <Button disableElevation variant="contained">
+            New Broadcast
+          </Button>
+        </Link>
       </Box>
 
       <DataGrid
@@ -119,11 +116,6 @@ export const BroadcastHistory = () => {
           );
         }}
         pageSizeOptions={[10, 20, 50, 100]}
-      />
-
-      <NewBroadcast
-        open={showNewBroadcast}
-        onCloseClicked={() => setShowNewBroadcast(false)}
       />
     </Container>
   );

@@ -1,3 +1,5 @@
+import { ContactGroup } from './contact-group.model';
+import { Contact } from './contact.model';
 import { PaginationMeta } from './pagination.model';
 
 export class Broadcast {
@@ -27,5 +29,19 @@ export class BroadcastResponse {
     this._meta = data._meta
       ? new PaginationMeta(data._meta)
       : new PaginationMeta({});
+  }
+}
+
+export class BroadcastFormDataResponse {
+  public contacts: Contact[];
+  public contactGroups: ContactGroup[];
+
+  constructor(data: any) {
+    this.contacts = data.contacts
+      ? data.contacts.map((item: any) => new Contact(item))
+      : [];
+    this.contactGroups = data.contactGroups
+      ? data.contactGroups.map((item: any) => new ContactGroup(item))
+      : [];
   }
 }

@@ -1,4 +1,5 @@
 import {
+  faAdd,
   faBusinessTime,
   faClock,
   faFile,
@@ -29,6 +30,11 @@ export const Broadcast = () => {
       label: 'Broadcast history',
       url: '/broadcasts/history',
       icon: faClock,
+    },
+    {
+      label: 'New broadcast',
+      url: '/broadcasts/new',
+      icon: faAdd,
     },
     {
       label: 'Scheduled Broadcasts',
@@ -66,7 +72,7 @@ export const Broadcast = () => {
         </List>
       </Box>
       <Divider orientation="vertical" />
-      <Box className="tw-flex-1">
+      <Box className="tw-flex-1 tw-overflow-y-auto">
         <Outlet />
       </Box>
     </Container>
@@ -76,3 +82,4 @@ export const Broadcast = () => {
 export * from './history';
 export * from './scheduled';
 export * from './templates';
+export * from './newBroadcast';

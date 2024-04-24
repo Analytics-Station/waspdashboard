@@ -7,9 +7,12 @@ import {
   BroadcastScheduled,
   BroadcastTemplates,
   BulkImportContacts,
+  ContactGroupList,
+  ContactGroups,
   ContactList,
   Contacts,
   Dashboard,
+  NewBroadcast,
   Register,
   SignIn,
 } from '../views';
@@ -29,8 +32,12 @@ export const AppRoutes = () => {
           <Route path="" element={<ContactList />} />
           <Route path="bulk-import" element={<BulkImportContacts />} />
         </Route>
+        <Route path="contact-groups" element={<ContactGroups />}>
+          <Route path="" element={<ContactGroupList />} />
+        </Route>
         <Route path="broadcasts" element={<Broadcast />}>
           <Route path="" element={<Navigate to="history" />} />
+          <Route path="new" element={<NewBroadcast />} />
           <Route path="history" element={<BroadcastHistory />} />
           <Route path="scheduled" element={<BroadcastScheduled />} />
           <Route path="templates" element={<BroadcastTemplates />} />
