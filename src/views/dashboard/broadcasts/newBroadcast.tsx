@@ -7,7 +7,10 @@ import {
   Container,
   FormControl,
   FormLabel,
+  InputLabel,
+  MenuItem,
   OutlinedInput,
+  Select,
   Typography,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -19,6 +22,7 @@ import * as yup from 'yup';
 import { FlexBox } from '../../../components';
 import {
   BroadcastFormDataResponse,
+  BroadcastTemplate,
   Contact,
   ContactGroup,
   makeRequest,
@@ -27,8 +31,8 @@ import {
 
 const FormSchema = yup
   .object({
-    broadcastName: yup.string().min(6),
-    templateId: yup.string().min(6),
+    broadcastName: yup.string().min(6).required(),
+    templateId: yup.string().required(),
     contacts: yup.array().required('required'),
     contactGroups: yup.array().required('required'),
   })
@@ -45,7 +49,7 @@ export const NewBroadcast = () => {
     mode: 'all',
     defaultValues: {
       broadcastName: '',
-      templateId: 'hello_world',
+      templateId: '',
       contacts: [],
       contactGroups: [],
     },
@@ -55,6 +59,7 @@ export const NewBroadcast = () => {
   const [loading, setLoading] = useState(false);
   const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [templates, setTemplates] = useState<BroadcastTemplate[]>([]);
 
   useEffect(() => {
     fetchBroadcastFormdata();
@@ -67,6 +72,7 @@ export const NewBroadcast = () => {
     const message = new BroadcastFormDataResponse(response.message);
     setContacts(message.contacts);
     setContactGroups(message.contactGroups);
+    setTemplates(message.templates);
   };
 
   const onSubmit = async (data: any) => {
@@ -78,7 +84,7 @@ export const NewBroadcast = () => {
         false,
         {
           broadcastName: data.broadcastName,
-          templateId: 'hello_world',
+          templateId: data.templateId,
           contacts: data.contacts,
           contactGroups: data.contactGroups,
         }
@@ -132,19 +138,25 @@ export const NewBroadcast = () => {
             name="templateId"
             control={control}
             render={({ field: { ref, onChange, onBlur, ...field } }) => (
-              <FormControl fullWidth className="tw-mt-4 tw-mb-2">
-                <FormLabel>Select template name</FormLabel>
-                <OutlinedInput
+              <FormControl fullWidth className="tw-mt-4 tw-mb-2" size="small">
+                <InputLabel id="template_name">Select template name</InputLabel>
+                <Select
+                  labelId="template_name"
+                  label="Select template name"
                   {...field}
                   ref={ref}
-                  size="small"
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!errors.broadcastName}
                   fullWidth
                   placeholder="Template name"
-                  readOnly
-                />
+                >
+                  {templates.map((template) => (
+                    <MenuItem key={template.id} value={template.id}>
+                      {template.name}
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             )}
           />
