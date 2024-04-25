@@ -5,7 +5,9 @@ import {
   Broadcast,
   BroadcastHistory,
   BroadcastScheduled,
+  BroadcastTemplateList,
   BroadcastTemplates,
+  BroadcastTemplateVariables,
   BulkImportContacts,
   ContactGroupList,
   ContactGroups,
@@ -13,6 +15,7 @@ import {
   Contacts,
   Dashboard,
   NewBroadcast,
+  NewTemplateVariable,
   Register,
   SignIn,
 } from '../views';
@@ -40,7 +43,15 @@ export const AppRoutes = () => {
           <Route path="new" element={<NewBroadcast />} />
           <Route path="history" element={<BroadcastHistory />} />
           <Route path="scheduled" element={<BroadcastScheduled />} />
-          <Route path="templates" element={<BroadcastTemplates />} />
+          <Route path="templates" element={<BroadcastTemplates />}>
+            <Route path="" element={<Navigate to="list" />} />
+            <Route path="list" element={<BroadcastTemplateList />} />
+            <Route
+              path="variables/list"
+              element={<BroadcastTemplateVariables />}
+            />
+            <Route path="variables/new" element={<NewTemplateVariable />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

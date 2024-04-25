@@ -6,3 +6,5 @@ export * from './contact.model';
 export * from './pagination.model';
 export * from './broadcast.model';
 export * from './contact-group.model';
+export * from './template-variable.model';
+export * from './broadcast-template.model';

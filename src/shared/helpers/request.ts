@@ -35,7 +35,7 @@ export const makeRequest = async <RequestType, ResponseType>(
       config.params = data;
     }
     const response = await getAxiosRequest().request(config);
-    return Promise.resolve(response.data);
+    return Promise.resolve(response.data as AppResponse<ResponseType>);
   } catch (error) {
     const err = error as Error | AxiosError;
     let message = '';
