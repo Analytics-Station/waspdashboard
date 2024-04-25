@@ -127,9 +127,6 @@ export const NewBroadcastTemplate = () => {
           </Button>
         </Box>
         <Divider />
-        {JSON.stringify(errors)}
-        {isValid ? 'y' : 'n'}
-        {isDirty ? 'y' : 'n'}
         <Box className="tw-mt-6 tw-text-right">
           <LoadingButton
             className="tw-ml-auto"
