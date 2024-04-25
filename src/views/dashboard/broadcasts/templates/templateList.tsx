@@ -27,10 +27,10 @@ export const BroadcastTemplateList = () => {
     useState<BroadcastTemplate | null>(null);
 
   useEffect(() => {
-    fetchBroadcastTemplate();
+    fetchBroadcastTemplates();
   }, [pagination]);
 
-  const fetchBroadcastTemplate = async () => {
+  const fetchBroadcastTemplates = async () => {
     const response = await makeRequest<null, BroadcastTemplateResponse>(
       `/broadcast-templates?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`
     );
@@ -42,13 +42,13 @@ export const BroadcastTemplateList = () => {
     setLoading(true);
     try {
       const response = await makeRequest<null, null>(
-        `/contact-groups/${selectedBroadcastTemplate?.id}`,
+        `/broadcast-templates/${selectedBroadcastTemplate?.id}`,
         RequestMethod.DELETE
       );
     } catch (e) {
       console.log(e);
     }
-    fetchBroadcastTemplate();
+    fetchBroadcastTemplates();
     setLoading(false);
     setShowDeleteDialog(false);
   };

@@ -1,4 +1,5 @@
 import { PaginationMeta } from './pagination.model';
+import { BroadcastTemplateVariable } from './template-variable.model';
 
 export class BroadcastTemplate {
   public id: number;
@@ -25,5 +26,15 @@ export class BroadcastTemplateResponse {
     this._meta = data._meta
       ? new PaginationMeta(data._meta)
       : new PaginationMeta({});
+  }
+}
+
+export class BroadcastTemplateFormdata {
+  public variables: BroadcastTemplateVariable[];
+
+  constructor(data: any) {
+    this.variables = data.variables
+      ? data.variables.map((item: any) => new BroadcastTemplateVariable(item))
+      : [];
   }
 }

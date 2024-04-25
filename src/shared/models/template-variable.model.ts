@@ -4,12 +4,14 @@ export class BroadcastTemplateVariable {
   public id: number;
   public name: string;
   public value: string;
+  public selector: string;
   public createdAt: Date;
 
   constructor(data: any) {
     this.id = data.id ? data.id : null;
     this.name = data.name ? data.name : null;
     this.value = data.value ? data.value : null;
+    this.selector = data.selector ? data.selector : null;
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
   }
 }

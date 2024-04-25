@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 
 import {
   Auth,
@@ -15,6 +15,7 @@ import {
   Contacts,
   Dashboard,
   NewBroadcast,
+  NewBroadcastTemplate,
   NewTemplateVariable,
   Register,
   SignIn,
@@ -24,13 +25,12 @@ export const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/auth" element={<Auth />}>
-        <Route path="" element={<Navigate to="signin" />} />
         <Route path="signin" element={<SignIn />} />
         <Route path="register" element={<Register />} />
+        <Route path="" element={<Navigate to="signin" />} />
       </Route>
 
       <Route path="" element={<Dashboard />}>
-        <Route path="" element={<Navigate to="contacts" />} />
         <Route path="contacts" element={<Contacts />}>
           <Route path="" element={<ContactList />} />
           <Route path="bulk-import" element={<BulkImportContacts />} />
@@ -44,15 +44,17 @@ export const AppRoutes = () => {
           <Route path="history" element={<BroadcastHistory />} />
           <Route path="scheduled" element={<BroadcastScheduled />} />
           <Route path="templates" element={<BroadcastTemplates />}>
-            <Route path="" element={<Navigate to="list" />} />
             <Route path="list" element={<BroadcastTemplateList />} />
-            <Route
-              path="variables/list"
-              element={<BroadcastTemplateVariables />}
-            />
-            <Route path="variables/new" element={<NewTemplateVariable />} />
+            <Route path="new" element={<NewBroadcastTemplate />} />
+            <Route path="variables" element={<Outlet />}>
+              <Route path="list" element={<BroadcastTemplateVariables />} />
+              <Route path="new" element={<NewTemplateVariable />} />
+              <Route path="" element={<Navigate to="list" />} />
+            </Route>
+            <Route path="" element={<Navigate to="list" />} />
           </Route>
         </Route>
+        <Route path="" element={<Navigate to="contacts" />} />
       </Route>
     </Routes>
   );

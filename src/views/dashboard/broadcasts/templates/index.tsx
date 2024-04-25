@@ -69,4 +69,5 @@ export const BroadcastTemplates = () => {
 };
 
 export * from './templateList';
+export * from './newTemplate';
 export * from './variables';
