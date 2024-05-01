@@ -39,3 +39,14 @@ export class ProcessContactResponse {
       : [];
   }
 }
+
+export class AssignedContact extends Contact {
+  public isAssigned?: boolean;
+  public updatedValue?: boolean;
+
+  constructor(data: any) {
+    super(data);
+    this.isAssigned = data.isAssigned != null ? data.isAssigned : false;
+    this.updatedValue = data.updatedValue != null ? data.updatedValue : false;
+  }
+}

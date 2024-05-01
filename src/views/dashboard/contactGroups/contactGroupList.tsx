@@ -1,4 +1,8 @@
-import { faTrashAlt, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTrashAlt,
+  faUserGroup,
+  faUserPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -20,11 +24,11 @@ import { DeleteDialog } from '../../../components';
 import {
   ContactGroup,
   ContactGroupResponse,
-  ContactResponse,
   makeRequest,
   PaginationMeta,
   RequestMethod,
 } from '../../../shared';
+import { AddRemoveGroupUsersDialog } from './addRemoveGroupUsers';
 import { NewContactGroup } from './newContactGroup';
 
 const FormSchema = yup
@@ -32,6 +36,11 @@ const FormSchema = yup
     query: yup.string(),
   })
   .required();
+
+interface GroupUpdate {
+  _add: number[];
+  _remove: number[];
+}
 
 export const ContactGroupList = () => {
   const {
@@ -58,6 +67,7 @@ export const ContactGroupList = () => {
   const [loading, setLoading] = useState(false);
   const [selectedContactGroup, setSelectedContactGroup] =
     useState<ContactGroup | null>(null);
+  const [showGroupContacts, setShowGroupContacts] = useState(false);
 
   useEffect(() => {
     fetchContactGroups();
@@ -67,7 +77,7 @@ export const ContactGroupList = () => {
     const response = await makeRequest<null, ContactGroupResponse>(
       `/contact-groups?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`
     );
-    const message = new ContactResponse(response.message);
+    const message = new ContactGroupResponse(response.message);
     setContactGroups(message.list);
   };
 
@@ -84,6 +94,28 @@ export const ContactGroupList = () => {
     fetchContactGroups();
     setLoading(false);
     setShowDeleteDialog(false);
+  };
+
+  const onGroupUpdate = async (added: number[], removed: number[]) => {
+    console.log(added, removed);
+    setLoading(true);
+    try {
+      const response = await makeRequest<GroupUpdate, null>(
+        `/contact-groups/${selectedContactGroup?.id}/contacts`,
+        RequestMethod.PATCH,
+        true,
+        {
+          _add: added,
+          _remove: removed,
+        }
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    fetchContactGroups();
+    setLoading(false);
+    setShowGroupContacts(false);
+    setSelectedContactGroup(null);
   };
 
   return (
@@ -142,30 +174,42 @@ export const ContactGroupList = () => {
           {
             field: 'Group name',
             valueFormatter: (val, row, col) => {
-              return row.name;
+              return `${row.name} (${row.contactCount} contacts)`;
             },
             flex: 1,
           },
           {
             field: 'Created at',
             valueFormatter: (val, row, col) => {
-              return moment(row.createdAt).format('DD, MMM YYYY HH:mm:ss');
+              return moment(row.createdAt).format('DD, MMM YYYY hh:mm A');
             },
             flex: 1,
           },
           {
             field: 'Actions',
             renderCell: (params) => (
-              <IconButton
-                color="error"
-                size="small"
-                onClick={() => {
-                  setSelectedContactGroup(params.row);
-                  setShowDeleteDialog(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </IconButton>
+              <>
+                <IconButton
+                  color="primary"
+                  size="small"
+                  onClick={() => {
+                    setSelectedContactGroup(params.row);
+                    setShowGroupContacts(true);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faUserPlus} />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  size="small"
+                  onClick={() => {
+                    setSelectedContactGroup(params.row);
+                    setShowDeleteDialog(true);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </IconButton>
+              </>
             ),
             flex: 1,
           },
@@ -197,17 +241,33 @@ export const ContactGroupList = () => {
           setShowNewContactGroup(false);
           fetchContactGroups();
         }}
-        contactGroupSaved={() => {
-          fetchContactGroups();
-        }}
+        contactGroupSaved={fetchContactGroups}
       />
+
+      {selectedContactGroup && (
+        <AddRemoveGroupUsersDialog
+          open={showGroupContacts}
+          loading={loading}
+          onUpdate={(added, removed) => {
+            onGroupUpdate(added, removed);
+          }}
+          onCancel={() => {
+            setSelectedContactGroup(null);
+            setShowGroupContacts(false);
+          }}
+          contactGroup={selectedContactGroup}
+        />
+      )}
 
       <DeleteDialog
         title="Delete contact group"
         subtitle={`Are you sure you want to delete ${selectedContactGroup?.name}?`}
         open={showDeleteDialog}
-        onCancelClicked={() => setShowDeleteDialog(false)}
-        onDeleteClicked={() => deleteContactGroup()}
+        onCancelClicked={() => {
+          setSelectedContactGroup(null);
+          setShowDeleteDialog(false);
+        }}
+        onDeleteClicked={deleteContactGroup}
         loading={loading}
       />
     </>
