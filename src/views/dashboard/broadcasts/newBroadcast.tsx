@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
+  Button,
   Container,
   FormControl,
   FormLabel,
@@ -16,7 +17,7 @@ import {
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { FlexBox } from '../../../components';
@@ -103,6 +104,23 @@ export const NewBroadcast = () => {
     setValue('contacts', []);
   };
 
+  if (templates.length === 0) {
+    return (
+      <Container maxWidth="md" className="tw-py-12">
+        <Box className="tw-text-center tw-border-2 tw-border-yellow-400 tw-border-solid tw-p-8 tw-rounded-md">
+          <Typography className="tw-mb-4" variant="h6">
+            This account does not contain any templates.
+          </Typography>
+          <Link to="/broadcasts/templates/new">
+            <Button variant="contained" disableElevation>
+              Create a new template
+            </Button>
+          </Link>
+        </Box>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md" className="tw-py-12">
       <Typography variant="body1" className="tw-font-bold">
@@ -150,6 +168,7 @@ export const NewBroadcast = () => {
                   error={!!errors.broadcastName}
                   fullWidth
                   placeholder="Template name"
+                  displayEmpty
                 >
                   {templates.map((template) => (
                     <MenuItem key={template.id} value={template.id}>

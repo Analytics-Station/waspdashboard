@@ -6,7 +6,12 @@ import { PaginationMeta } from './pagination.model';
 export class Broadcast {
   public id: number;
   public name: string;
-  public templateId: string;
+  public templateId: number;
+  public recipients: number;
+  public read: number;
+  public delivered: number;
+  public accepted: number;
+  public failed: number;
   public contacts: string[];
   public createdAt: Date;
 
@@ -14,6 +19,11 @@ export class Broadcast {
     this.id = data.id ? data.id : null;
     this.name = data.name ? data.name : null;
     this.templateId = data.templateId ? data.templateId : null;
+    this.recipients = data.recipients != null ? data.recipients : null;
+    this.read = data.read != null ? data.read : null;
+    this.delivered = data.delivered != null ? data.delivered : null;
+    this.accepted = data.accepted != null ? data.accepted : null;
+    this.failed = data.failed != null ? data.failed : null;
     this.contacts = data.contacts ? data.contacts : [];
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
   }

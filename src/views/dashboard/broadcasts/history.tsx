@@ -55,20 +55,6 @@ export const BroadcastHistory = () => {
             flex: 1,
           },
           {
-            field: 'Scheduled',
-            valueFormatter: (val, row, col) => {
-              return moment(row.createdAt).format('DD, MMM YYYY HH:mm:ss');
-            },
-            flex: 1,
-          },
-          {
-            field: 'Read',
-            valueFormatter: (val, row, col) => {
-              return '-';
-            },
-            flex: 1,
-          },
-          {
             field: 'Recipients',
             valueFormatter: (val, row, col) => {
               return row.contacts.length;
@@ -76,23 +62,37 @@ export const BroadcastHistory = () => {
             flex: 1,
           },
           {
+            field: 'Sent at',
+            valueFormatter: (val, row, col) => {
+              return moment(row.createdAt).format('DD, MMM YYYY hh:mm A');
+            },
+            flex: 1,
+          },
+          {
+            field: 'Accepted',
+            valueFormatter: (val, row, col) => {
+              return row.accepted;
+            },
+            flex: 1,
+          },
+          {
+            field: 'Delivered',
+            valueFormatter: (val, row, col) => {
+              return row.delivered;
+            },
+            flex: 1,
+          },
+          {
+            field: 'Read',
+            valueFormatter: (val, row, col) => {
+              return row.read;
+            },
+            flex: 1,
+          },
+          {
             field: 'Failed',
             valueFormatter: (val, row, col) => {
-              return '-';
-            },
-            flex: 1,
-          },
-          {
-            field: 'Status',
-            valueFormatter: (val, row, col) => {
-              return 'Delivered';
-            },
-            flex: 1,
-          },
-          {
-            field: 'Template',
-            valueFormatter: (val, row, col) => {
-              return row.templateId;
+              return row.failed;
             },
             flex: 1,
           },
