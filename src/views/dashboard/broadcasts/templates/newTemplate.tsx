@@ -9,11 +9,23 @@ import {
   Divider,
   FormControl,
   FormLabel,
+  InputLabel,
+  MenuItem,
   OutlinedInput,
+  Select,
 } from '@mui/material';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { RichTextEditorProvider, RichTextField } from 'mui-tiptap';
+import {
+  MenuButtonBold,
+  MenuButtonItalic,
+  MenuButtonStrikethrough,
+  MenuControlsContainer,
+  MenuDivider,
+  MenuSelectHeading,
+  RichTextEditorProvider,
+  RichTextField,
+} from 'mui-tiptap';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -25,11 +37,13 @@ import { SelectTemplateVariable } from './selectVariable';
 const FormSchema = yup
   .object({
     name: yup.string().min(6).required(),
+    category: yup.string().required(),
     content: yup.string().min(6).required(),
   })
   .required();
 
 export const NewBroadcastTemplate = () => {
+  const categories = ['AUTHENTICATION', 'MARKETING', 'UTILITY'];
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showTemplateSelection, setShowTemplateSelection] = useState(false);
@@ -45,6 +59,7 @@ export const NewBroadcastTemplate = () => {
     defaultValues: {
       name: '',
       content: '',
+      category: '',
     },
     resolver: yupResolver(FormSchema),
   });
@@ -59,6 +74,7 @@ export const NewBroadcastTemplate = () => {
         {
           name: data.name,
           content: data.content,
+          category: data.category,
         }
       );
       navigate('/broadcasts/templates/list');
@@ -72,6 +88,7 @@ export const NewBroadcastTemplate = () => {
   const resetForm = () => {
     setValue('name', '');
     setValue('content', '');
+    setValue('category', '');
   };
 
   const editor = useEditor({
@@ -105,13 +122,51 @@ export const NewBroadcastTemplate = () => {
           )}
         />
         <Controller
+          name="category"
+          control={control}
+          render={({ field: { ref, onChange, onBlur, ...field } }) => (
+            <FormControl fullWidth className="tw-mt-4 tw-mb-6" size="small">
+              <InputLabel id="category">Select category</InputLabel>
+              <Select
+                labelId="category"
+                label="Select category"
+                {...field}
+                ref={ref}
+                onChange={onChange}
+                onBlur={onBlur}
+                error={!!errors.category}
+                fullWidth
+                placeholder="Select category"
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+        />
+        <Controller
           name="content"
           control={control}
           render={({ field: { ref, onChange, onBlur, value, ...field } }) => (
             <FormControl fullWidth>
               <FormLabel>Value</FormLabel>
               <RichTextEditorProvider editor={editor}>
-                <RichTextField {...field} className="tw-h-48" />
+                <RichTextField
+                  {...field}
+                  controls={
+                    <MenuControlsContainer>
+                      <MenuSelectHeading />
+                      <MenuDivider />
+                      <MenuButtonBold />
+                      <MenuButtonItalic />
+                      <MenuButtonStrikethrough />
+                    </MenuControlsContainer>
+                  }
+                  className="tw-h-48"
+                />
               </RichTextEditorProvider>
             </FormControl>
           )}
@@ -136,7 +191,7 @@ export const NewBroadcastTemplate = () => {
             type="submit"
             loading={loading}
           >
-            Save changes
+            Request template
           </LoadingButton>
         </Box>
       </form>

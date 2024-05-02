@@ -168,7 +168,6 @@ export const NewBroadcast = () => {
                   error={!!errors.broadcastName}
                   fullWidth
                   placeholder="Template name"
-                  displayEmpty
                 >
                   {templates.map((template) => (
                     <MenuItem key={template.id} value={template.id}>

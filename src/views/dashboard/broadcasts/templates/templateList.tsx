@@ -1,6 +1,6 @@
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Container, IconButton } from '@mui/material';
+import { Chip, Container, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -74,6 +74,23 @@ export const BroadcastTemplateList = () => {
             field: 'Name',
             valueFormatter: (val, row, col) => {
               return row.name;
+            },
+            flex: 1,
+          },
+          {
+            field: 'Status',
+            renderCell: ({ formattedValue }) => {
+              return (
+                <Chip
+                  className="tw-font-medium"
+                  color="primary"
+                  size="small"
+                  label={formattedValue}
+                />
+              );
+            },
+            valueFormatter: (val, row, col) => {
+              return 'Pending';
             },
             flex: 1,
           },
