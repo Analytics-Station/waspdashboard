@@ -57,7 +57,7 @@ export const BroadcastHistory = () => {
           {
             field: 'Recipients',
             valueFormatter: (val, row, col) => {
-              return row.contacts.length;
+              return row.recipients;
             },
             flex: 1,
           },
