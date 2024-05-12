@@ -53,6 +53,7 @@ export const AppRoutes = () => {
             </Route>
             <Route path="" element={<Navigate to="list" />} />
           </Route>
+          <Route path="new-template" element={<NewBroadcastTemplate />} />
         </Route>
         <Route path="" element={<Navigate to="contacts" />} />
       </Route>

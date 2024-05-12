@@ -1,52 +1,33 @@
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoadingButton } from '@mui/lab';
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  FormControl,
-  FormLabel,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-} from '@mui/material';
+import { Box, Container, IconButton, Typography } from '@mui/material';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import {
-  MenuButtonBold,
-  MenuButtonItalic,
-  MenuButtonStrikethrough,
-  MenuControlsContainer,
-  MenuDivider,
-  MenuSelectHeading,
-  RichTextEditorProvider,
-  RichTextField,
-} from 'mui-tiptap';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { makeRequest, RequestMethod } from '../../../../shared';
-import { SelectTemplateVariable } from './selectVariable';
+import { TemplateForm1, TemplateForm2 } from './templateForm';
 
 const FormSchema = yup
   .object({
     name: yup.string().min(6).required(),
     category: yup.string().required(),
     content: yup.string().min(6).required(),
+    header: yup.string().required(),
+    footer: yup.string().required(),
   })
   .required();
 
 export const NewBroadcastTemplate = () => {
   const categories = ['AUTHENTICATION', 'MARKETING', 'UTILITY'];
   const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showTemplateSelection, setShowTemplateSelection] = useState(false);
+  const [formData, setFormData] = useState<any>({});
 
   const {
     handleSubmit,
@@ -64,32 +45,26 @@ export const NewBroadcastTemplate = () => {
     resolver: yupResolver(FormSchema),
   });
 
-  const onSubmit = async (data: any) => {
-    setLoading(true);
-    try {
-      const response = await makeRequest(
-        '/broadcast-templates',
-        RequestMethod.POST,
-        false,
-        {
-          name: data.name,
-          content: data.content,
-          category: data.category,
-        }
-      );
-      navigate('/broadcasts/templates/list');
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
-    resetForm();
-  };
-
-  const resetForm = () => {
-    setValue('name', '');
-    setValue('content', '');
-    setValue('category', '');
-  };
+  // const onSubmit = async (data: any) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await makeRequest(
+  //       '/broadcast-templates',
+  //       RequestMethod.POST,
+  //       false,
+  //       {
+  //         name: data.name,
+  //         content: data.content,
+  //         category: data.category,
+  //       }
+  //     );
+  //     navigate('/broadcasts/templates/list');
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //   setLoading(false);
+  //   resetForm();
+  // };
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -100,8 +75,61 @@ export const NewBroadcastTemplate = () => {
   });
 
   return (
-    <Container maxWidth="sm">
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Container maxWidth="md">
+      <Box
+        className={`tw-flex tw-items-center tw-bg-slate-100 tw-px-4 ${
+          currentStep === 2 ? 'tw-py-2' : 'tw-py-4'
+        } tw-mt-4 tw-rounded-lg`}
+      >
+        {currentStep === 2 && (
+          <IconButton
+            size="small"
+            className="tw-mr-4"
+            onClick={() => {
+              if (currentStep > 1) {
+                setCurrentStep(currentStep - 1);
+              }
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </IconButton>
+        )}
+        <Typography variant="subtitle1" className="tw-font-bold">
+          New Message Template
+        </Typography>
+      </Box>
+
+      {currentStep === 1 && (
+        <TemplateForm1
+          formData={formData}
+          nextClicked={(data) => {
+            setFormData({
+              ...data,
+            });
+            setCurrentStep(2);
+          }}
+        />
+      )}
+
+      {currentStep === 2 && (
+        <TemplateForm2
+          saveClicked={(data) => {
+            console.log(formData);
+            console.log(data);
+            navigate('/broadcasts/templates/list');
+            // setFormData({
+            //   ...formData,
+            //   data,
+            // });
+            console.log({
+              ...formData,
+              ...data,
+            });
+          }}
+        />
+      )}
+
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="name"
           control={control}
@@ -214,7 +242,7 @@ export const NewBroadcastTemplate = () => {
           }
           setShowTemplateSelection(false);
         }}
-      />
+      /> */}
     </Container>
   );
 };

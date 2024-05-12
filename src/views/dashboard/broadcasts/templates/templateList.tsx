@@ -1,6 +1,6 @@
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Chip, Container, IconButton } from '@mui/material';
+import { Chip, Container, IconButton, Tooltip } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -72,25 +72,43 @@ export const BroadcastTemplateList = () => {
           },
           {
             field: 'Name',
+            renderCell: ({ formattedValue, row }) => {
+              return (
+                <Tooltip title={row.name}>
+                  <p>{row.name}</p>
+                </Tooltip>
+              );
+            },
             valueFormatter: (val, row, col) => {
               return row.name;
             },
             flex: 1,
           },
           {
+            field: 'Category',
+            valueFormatter: (val, row, col) => {
+              return row.category;
+            },
+            flex: 1,
+          },
+          {
+            field: 'Language',
+            valueFormatter: (val, row, col) => {
+              return row.language;
+            },
+            flex: 1,
+          },
+          {
             field: 'Status',
-            renderCell: ({ formattedValue }) => {
+            renderCell: ({ formattedValue, row }) => {
               return (
                 <Chip
                   className="tw-font-medium"
-                  color="primary"
+                  color={row.getStatusColor()}
                   size="small"
-                  label={formattedValue}
+                  label={row.status}
                 />
               );
-            },
-            valueFormatter: (val, row, col) => {
-              return 'Pending';
             },
             flex: 1,
           },
