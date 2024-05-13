@@ -5,18 +5,23 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
+  MenuItem,
   OutlinedInput,
   Radio,
   RadioGroup,
+  Select,
   Typography,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { languages } from '../../../../../shared';
+
 const FormSchema = yup
   .object({
     category: yup.string().min(6).required(),
     name: yup.string().required(),
+    language: yup.string().required(),
   })
   .required();
 
@@ -37,6 +42,7 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
     defaultValues: {
       name: formData['name'] ? formData['name'] : '',
       category: formData['category'] ? formData['category'] : '',
+      language: formData['language'] ? formData['language'] : 'en_US',
     },
     resolver: yupResolver(FormSchema),
   });
@@ -129,6 +135,37 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
                 fullWidth
                 placeholder="Template identifier"
               />
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box className="tw-p-4 tw-bg-slate-100 tw-mt-4 tw-rounded-lg">
+        <Typography variant="subtitle1" className="tw-font-bold">
+          Language
+        </Typography>
+        <Typography variant="body2" className="tw-text-slate-500 tw-mb-2">
+          Choose the language for your message template.
+        </Typography>
+        <Controller
+          name="language"
+          control={control}
+          render={({ field: { ref, onChange, onBlur, ...field } }) => (
+            <FormControl>
+              <Select
+                size="small"
+                {...field}
+                ref={ref}
+                onChange={onChange}
+                onBlur={onBlur}
+                error={!!errors.language}
+              >
+                {languages.map((language) => (
+                  <MenuItem key={language[1]} value={language[1]}>
+                    {language[0]}
+                  </MenuItem>
+                ))}
+              </Select>
             </FormControl>
           )}
         />

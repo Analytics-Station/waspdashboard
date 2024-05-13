@@ -6,9 +6,12 @@ interface PresignedUrlResponse {
 }
 
 export class S3Service {
-  getPresignedUrl = async (): Promise<PresignedUrlResponse> => {
+  getPresignedUrl = async (
+    ext = 'xlsx',
+    fileType = 0
+  ): Promise<PresignedUrlResponse> => {
     const resp = await makeRequest<undefined, PresignedUrlResponse>(
-      's3/presigned'
+      `s3/presigned?ext=${ext}&fileType=${fileType}`
     );
     return Promise.resolve(resp.message);
   };

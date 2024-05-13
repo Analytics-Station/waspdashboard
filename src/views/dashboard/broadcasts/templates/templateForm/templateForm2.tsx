@@ -44,6 +44,7 @@ const FormSchema = yup
   .required();
 
 interface Props {
+  formData: any;
   saveClicked: (data: any) => void;
 }
 
@@ -52,7 +53,7 @@ interface FileInfo {
   fileUrl: string;
 }
 
-export const TemplateForm2 = ({ saveClicked }: Props) => {
+export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
   const {
     handleSubmit,
     control,
@@ -63,11 +64,11 @@ export const TemplateForm2 = ({ saveClicked }: Props) => {
   } = useForm({
     mode: 'all',
     defaultValues: {
-      headerType: -1,
-      headerTitle: '',
-      headerFile: '',
-      footer: '',
-      content: '',
+      headerType: formData['headerType'] ? formData['headerType'] : -1,
+      headerTitle: formData['headerTitle'] ? formData['headerTitle'] : '',
+      headerFile: formData['headerFile'] ? formData['headerFile'] : '',
+      footer: formData['footer'] ? formData['footer'] : '',
+      content: formData['content'] ? formData['content'] : '',
     },
     resolver: yupResolver(FormSchema),
   });
@@ -127,7 +128,11 @@ export const TemplateForm2 = ({ saveClicked }: Props) => {
 
   const onFileSelect = async (file: File) => {
     const s3Service = new S3Service();
-    const fileInfo = await s3Service.getPresignedUrl();
+    const parts = file.name.split('.');
+    const fileInfo = await s3Service.getPresignedUrl(
+      parts[parts.length - 1],
+      getValues('headerType') === 2 ? 1 : 2
+    );
     const arrayBuf = await file.arrayBuffer();
     await uploadFile(fileInfo.uploadSignedUrl, arrayBuf);
     setFileDetails({

@@ -111,7 +111,6 @@ export const NewTemplateVariable = () => {
             </FormControl>
           )}
         />
-        {JSON.stringify(errors.name)}
         <Box className="tw-mt-6 tw-text-right">
           <LoadingButton
             className="tw-ml-auto"
