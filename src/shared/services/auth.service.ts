@@ -1,7 +1,12 @@
 import { Location, NavigateFunction } from 'react-router-dom';
 
 import { makeRequest } from '../helpers';
-import { LocalStorageItem, LoginResponse, User } from '../models';
+import {
+  LocalStorageItem,
+  LoginResponse,
+  RequestMethod,
+  User,
+} from '../models';
 
 export class AuthService {
   isUserLoggedIn = (): boolean => {
@@ -20,7 +25,11 @@ export class AuthService {
       return Promise.reject();
     }
     try {
-      const response = await makeRequest<null, LoginResponse>('/auth/validate');
+      const response = await makeRequest<null, LoginResponse>(
+        '/auth/validate',
+        RequestMethod.GET,
+        true
+      );
       localStorage.setItem(LocalStorageItem.Token, response.message.token);
       this.setUserLoggedIn();
       if (this.isAuthRoute(location.pathname)) {
