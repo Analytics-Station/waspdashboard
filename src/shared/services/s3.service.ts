@@ -3,6 +3,7 @@ import { makeRequest } from '../helpers';
 interface PresignedUrlResponse {
   fileUrl: string;
   uploadSignedUrl: string;
+  contentType: string;
 }
 
 export class S3Service {

@@ -17,13 +17,17 @@ export const makeRequest = async <RequestType, ResponseType>(
   URL: string,
   method: RequestMethod = RequestMethod.GET,
   validate = true,
-  data?: RequestType
+  data?: RequestType,
+  headers?: AxiosHeaders
 ): Promise<AppResponse<ResponseType>> => {
   try {
-    const headers = new AxiosHeaders({});
+    let newHeaders = new AxiosHeaders({});
+    if (headers) {
+      newHeaders = headers;
+    }
     const token = localStorage.getItem(LocalStorageItem.Token);
     if (validate && token) {
-      headers.set('Authorization', `${token}`);
+      newHeaders.set('Authorization', `${token}`);
     }
     const config: AxiosRequestConfig = {
       method,
