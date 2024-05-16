@@ -43,8 +43,8 @@ export const AppRoutes = () => {
           <Route path="new" element={<NewBroadcast />} />
           <Route path="history" element={<BroadcastHistory />} />
           <Route path="scheduled" element={<BroadcastScheduled />} />
+          <Route path="templates/new" element={<NewBroadcastTemplate />} />
           <Route path="templates" element={<BroadcastTemplates />}>
-            <Route path="new" element={<NewBroadcastTemplate />} />
             <Route path="list" element={<BroadcastTemplateList />} />
             <Route path="variables" element={<Outlet />}>
               <Route path="list" element={<BroadcastTemplateVariables />} />

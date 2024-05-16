@@ -1,5 +1,3 @@
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
@@ -13,23 +11,12 @@ import {
   Select,
   Typography,
 } from '@mui/material';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import {
-  MenuButtonBold,
-  MenuButtonItalic,
-  MenuButtonStrikethrough,
-  MenuControlsContainer,
-  MenuDivider,
-  MenuSelectHeading,
-  RichTextEditorProvider,
-  RichTextField,
-} from 'mui-tiptap';
 import { useCallback, useEffect, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { TipTapEditor } from '../../../../../components';
 import { makeRequest, RequestMethod, S3Service } from '../../../../../shared';
 import { SelectTemplateVariable } from '../selectVariable';
 
@@ -71,8 +58,10 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
       content: formData['content'] ? formData['content'] : '',
     },
     resolver: yupResolver(FormSchema),
+    shouldUnregister: false,
   });
   const watchHeaderType = watch('headerType');
+  const watchContent = watch('content');
   const [showTemplateSelection, setShowTemplateSelection] = useState(false);
   const [fileDetails, setFileDetails] = useState<FileInfo | null>(null);
 
@@ -84,14 +73,6 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
   const onSubmit = async (data: any) => {
     saveClicked(data);
   };
-
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: getValues('content'),
-    onUpdate: (e) => {
-      setValue('content', e.editor.getHTML());
-    },
-  });
 
   const isFormDisabled = (): boolean => {
     if (!isValid || !isDirty) {
@@ -246,26 +227,13 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
         <Controller
           name="content"
           control={control}
-          render={({ field: { ref, onChange, onBlur, value, ...field } }) => (
+          render={({ field: { onChange, value, ...field } }) => (
             <FormControl fullWidth>
-              <RichTextEditorProvider editor={editor}>
-                <RichTextField
-                  {...field}
-                  controls={
-                    <MenuControlsContainer>
-                      <MenuSelectHeading />
-                      <MenuDivider />
-                      <MenuButtonBold />
-                      <MenuButtonItalic />
-                      <MenuButtonStrikethrough />
-                    </MenuControlsContainer>
-                  }
-                />
-              </RichTextEditorProvider>
+              <TipTapEditor initialValue={value} onChange={onChange} />
             </FormControl>
           )}
         />
-        <Box className="tw-my-1 tw-text-right">
+        {/* <Box className="tw-my-1 tw-text-right">
           <Button
             color="secondary"
             size="small"
@@ -274,7 +242,7 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
           >
             Add variable
           </Button>
-        </Box>
+        </Box> */}
       </Box>
 
       <Box className="tw-p-4 tw-bg-slate-100 tw-mt-4 tw-rounded-lg">
@@ -323,18 +291,18 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
         open={showTemplateSelection}
         onCloseClicked={() => setShowTemplateSelection(false)}
         variableSelected={(variable) => {
-          const tempDiv = document.createElement('div');
-          const content = getValues('content');
-          if (content != null) {
-            tempDiv.innerHTML = content;
-            const paragraphElement = tempDiv.querySelector('p');
-            if (paragraphElement != null) {
-              paragraphElement.innerHTML += `${variable.selector}`;
-              editor?.commands.setContent(paragraphElement.innerHTML, true);
-            } else {
-              editor?.commands.setContent(`<p>${variable.selector}</p>`, true);
-            }
-          }
+          // const tempDiv = document.createElement('div');
+          // const content = getValues('content');
+          // if (content != null) {
+          //   tempDiv.innerHTML = content;
+          //   const paragraphElement = tempDiv.querySelector('p');
+          //   if (paragraphElement != null) {
+          //     paragraphElement.innerHTML += `${variable.selector}`;
+          //     editor?.commands.setContent(paragraphElement.innerHTML, true);
+          //   } else {
+          //     editor?.commands.setContent(`<p>${variable.selector}</p>`, true);
+          //   }
+          // }
           setShowTemplateSelection(false);
         }}
       />

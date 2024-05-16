@@ -9,6 +9,7 @@ import { DeleteDialog } from '../../../../components';
 import {
   BroadcastTemplate,
   BroadcastTemplateResponse,
+  languages,
   makeRequest,
   PaginationMeta,
   RequestMethod,
@@ -94,7 +95,10 @@ export const BroadcastTemplateList = () => {
           {
             field: 'Language',
             valueFormatter: (val, row, col) => {
-              return row.language;
+              const language = languages.find(
+                (lang) => lang[1] === row.language
+              );
+              return language ? language[0] : row.language;
             },
             flex: 1,
           },
