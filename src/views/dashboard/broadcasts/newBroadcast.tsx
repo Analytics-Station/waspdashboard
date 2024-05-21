@@ -145,7 +145,7 @@ export const NewBroadcast = () => {
     const parts = file.name.split('.');
     const fileInfo = await s3Service.getPresignedUrl(
       parts[parts.length - 1],
-      1
+      3
     );
     const arrayBuf = await file.arrayBuffer();
     await s3Service.uploadFile(
