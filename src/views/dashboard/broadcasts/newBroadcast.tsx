@@ -6,8 +6,10 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   FormControl,
   FormLabel,
+  Grid,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -15,7 +17,8 @@ import {
   Typography,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { Accept, useDropzone } from 'react-dropzone';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -26,8 +29,10 @@ import {
   BroadcastTemplate,
   Contact,
   ContactGroup,
+  FileInfo,
   makeRequest,
   RequestMethod,
+  S3Service,
 } from '../../../shared';
 
 const FormSchema = yup
@@ -36,6 +41,7 @@ const FormSchema = yup
     templateId: yup.string().required(),
     contacts: yup.array().required('required'),
     contactGroups: yup.array().required('required'),
+    headerFile: yup.string().nullable(),
   })
   .required();
 
@@ -45,6 +51,8 @@ export const NewBroadcast = () => {
     handleSubmit,
     control,
     setValue,
+    getValues,
+    watch,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: 'all',
@@ -53,6 +61,7 @@ export const NewBroadcast = () => {
       templateId: '',
       contacts: [],
       contactGroups: [],
+      headerFile: '',
     },
     resolver: yupResolver(FormSchema),
   });
@@ -61,6 +70,9 @@ export const NewBroadcast = () => {
   const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [templates, setTemplates] = useState<BroadcastTemplate[]>([]);
+  const [fileDetails, setFileDetails] = useState<FileInfo | null>(null);
+
+  const watchTemplateId = watch('templateId');
 
   useEffect(() => {
     fetchBroadcastFormdata();
@@ -78,17 +90,23 @@ export const NewBroadcast = () => {
 
   const onSubmit = async (data: any) => {
     setLoading(true);
+    const payload: any = {
+      broadcastName: data.broadcastName,
+      templateId: data.templateId,
+      contacts: data.contacts,
+      contactGroups: data.contactGroups,
+    };
+
+    if (isSelectedTemplateImage()) {
+      payload['imageUrl'] = data.headerFile;
+    }
+
     try {
       const response = await makeRequest(
         '/broadcasts',
         RequestMethod.POST,
         false,
-        {
-          broadcastName: data.broadcastName,
-          templateId: data.templateId,
-          contacts: data.contacts,
-          contactGroups: data.contactGroups,
-        }
+        payload
       );
       navigate('/broadcasts/history');
     } catch (e) {
@@ -102,6 +120,73 @@ export const NewBroadcast = () => {
     setValue('broadcastName', '');
     setValue('templateId', '');
     setValue('contacts', []);
+  };
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      onFileSelect(acceptedFiles[0]);
+    }
+  }, []);
+
+  const getFileTypes = (): Accept => {
+    return {
+      'image/jpeg': ['.jpeg', '.jpg'],
+      'image/png': ['.png'],
+    };
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: getFileTypes(),
+  });
+
+  const onFileSelect = async (file: File) => {
+    const s3Service = new S3Service();
+    const parts = file.name.split('.');
+    const fileInfo = await s3Service.getPresignedUrl(
+      parts[parts.length - 1],
+      1
+    );
+    const arrayBuf = await file.arrayBuffer();
+    await s3Service.uploadFile(
+      fileInfo.uploadSignedUrl,
+      arrayBuf,
+      fileInfo.contentType
+    );
+    setFileDetails({
+      fileName: file.name,
+      fileUrl: fileInfo.fileUrl,
+    });
+    setValue('headerFile', fileInfo.fileUrl);
+  };
+
+  const isSelectedTemplateImage = (): boolean => {
+    const selectedTemplate = templates.find(
+      (template) => template.id === +watchTemplateId
+    );
+    return (selectedTemplate && selectedTemplate.hasImage) || false;
+  };
+
+  const disableForm = (): boolean => {
+    if (!isValid || !isDirty) {
+      return true;
+    }
+
+    const selectedTemplate = templates.find(
+      (template) => template.id === +watchTemplateId
+    );
+
+    if (
+      !(
+        selectedTemplate &&
+        selectedTemplate.hasImage &&
+        getValues('headerFile')
+      )
+    ) {
+      return true;
+    }
+
+    return false;
   };
 
   if (templates.length === 0) {
@@ -131,7 +216,7 @@ export const NewBroadcast = () => {
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box className="tw-mt-4 tw-mb-6 tw-p-4 tw-bg-slate-100 tw-rounded-lg">
+        <Box className="tw-mt-2 tw-mb-8 tw-p-4 tw-bg-slate-100 tw-rounded-lg">
           <Controller
             name="broadcastName"
             control={control}
@@ -178,12 +263,53 @@ export const NewBroadcast = () => {
               </FormControl>
             )}
           />
+
+          {isSelectedTemplateImage() && (
+            <>
+              <Divider className="tw-my-4" />
+              <Typography variant="subtitle2">
+                Select the image you want to send with this broadcast
+              </Typography>
+              <Grid
+                {...getRootProps()}
+                container
+                justifyContent="center"
+                className={`tw-mt-2 tw-px-4 tw-py-12 tw-border-2 tw-border-dashed tw-border-yellow-500 tw-rounded-md ${
+                  isDragActive && 'tw-bg-slate-100'
+                } tw-cursor-pointer`}
+              >
+                <input {...getInputProps()} />
+                <Grid item sm={6} className="tw-text-center">
+                  {fileDetails ? (
+                    <>
+                      <Typography
+                        variant="subtitle1"
+                        className="tw-font-semibold"
+                      >
+                        Click here or drag your file to change image
+                      </Typography>
+                      <Typography variant="body2">
+                        {fileDetails.fileName}
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography
+                      variant="subtitle1"
+                      className="tw-font-semibold"
+                    >
+                      Click here or drag your file to upload your image
+                    </Typography>
+                  )}
+                </Grid>
+              </Grid>
+            </>
+          )}
         </Box>
         <Typography variant="body1" className="tw-font-bold">
           Who do you want to send it to?
         </Typography>
 
-        <Box className="tw-mt-4 tw-p-4 tw-bg-slate-200 tw-rounded-md">
+        <Box className="tw-mt-2 tw-p-4 tw-bg-slate-200 tw-rounded-md">
           <FlexBox className="tw-mb-2">
             <FontAwesomeIcon icon={faContactBook} color="#f8c70f" />
             <Typography variant="subtitle1" className="tw-font-bold tw-ml-2">
@@ -261,7 +387,7 @@ export const NewBroadcast = () => {
         </Box>
         <Box className="tw-mt-6 tw-text-right">
           <LoadingButton
-            disabled={!isValid || !isDirty}
+            disabled={disableForm()}
             variant="contained"
             disableElevation
             type="submit"

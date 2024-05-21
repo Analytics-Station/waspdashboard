@@ -11,14 +11,13 @@ import {
   Select,
   Typography,
 } from '@mui/material';
-import { AxiosHeaders } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import { TipTapEditor } from '../../../../../components';
-import { makeRequest, RequestMethod, S3Service } from '../../../../../shared';
+import { FileInfo, S3Service } from '../../../../../shared';
 import { SelectTemplateVariable } from '../selectVariable';
 
 const FormSchema = yup
@@ -34,11 +33,6 @@ const FormSchema = yup
 interface Props {
   formData: any;
   saveClicked: (data: any) => void;
-}
-
-interface FileInfo {
-  fileName: string;
-  fileUrl: string;
 }
 
 export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
@@ -62,7 +56,6 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
     shouldUnregister: false,
   });
   const watchHeaderType = watch('headerType');
-  const watchContent = watch('content');
   const [showTemplateSelection, setShowTemplateSelection] = useState(false);
   const [fileDetails, setFileDetails] = useState<FileInfo | null>(null);
 
@@ -116,28 +109,16 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
       getValues('headerType') === 2 ? 1 : 2
     );
     const arrayBuf = await file.arrayBuffer();
-    await uploadFile(fileInfo.uploadSignedUrl, arrayBuf, fileInfo.contentType);
+    await s3Service.uploadFile(
+      fileInfo.uploadSignedUrl,
+      arrayBuf,
+      fileInfo.contentType
+    );
     setFileDetails({
       fileName: file.name,
       fileUrl: fileInfo.fileUrl,
     });
     setValue('headerFile', fileInfo.fileUrl);
-  };
-
-  const uploadFile = async (
-    uploadUrl: string,
-    data: ArrayBuffer,
-    mimeType: string
-  ) => {
-    const headers = new AxiosHeaders({});
-    headers.set('Content-Type', mimeType);
-    const response = await makeRequest(
-      uploadUrl,
-      RequestMethod.PUT,
-      false,
-      data,
-      headers
-    );
   };
 
   return (

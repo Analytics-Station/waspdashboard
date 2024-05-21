@@ -9,6 +9,7 @@ export class BroadcastTemplate {
   public category: string;
   public status: string;
   public whatsappId: string;
+  public hasImage?: boolean;
   public createdAt: Date;
 
   constructor(data: any) {
@@ -19,6 +20,7 @@ export class BroadcastTemplate {
     this.category = data.category ? data.category : null;
     this.status = data.status ? data.status : null;
     this.whatsappId = data.whatsappId ? data.whatsappId : null;
+    this.hasImage = data.hasImage != null ? data.hasImage : null;
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
   }
 

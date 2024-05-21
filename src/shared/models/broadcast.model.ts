@@ -56,7 +56,7 @@ export class BroadcastFormDataResponse {
       ? data.contactGroups.map((item: any) => new ContactGroup(item))
       : [];
     this.templates = data.templates
-      ? data.templates.map((item: any) => new ContactGroup(item))
+      ? data.templates.map((item: any) => new BroadcastTemplate(item))
       : [];
   }
 }
