@@ -33,7 +33,7 @@ export const makeRequest = async <RequestType, ResponseType>(
       method,
       url: URL,
       data,
-      headers,
+      headers: newHeaders,
     };
     if (method === RequestMethod.GET) {
       config.params = data;
