@@ -19,6 +19,8 @@ import {
   NewTemplateVariable,
   Register,
   SignIn,
+  UserList,
+  Users,
 } from '../views';
 
 export const AppRoutes = () => {
@@ -54,6 +56,9 @@ export const AppRoutes = () => {
             <Route path="" element={<Navigate to="list" />} />
           </Route>
           <Route path="new-template" element={<NewBroadcastTemplate />} />
+        </Route>
+        <Route path="users" element={<Users />}>
+          <Route path="" element={<UserList />} />
         </Route>
         <Route path="" element={<Navigate to="contacts" />} />
       </Route>

@@ -2,6 +2,7 @@ import {
   faAddressBook,
   faBullhorn,
   faPeopleGroup,
+  faUserGroup,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,6 +31,7 @@ interface MenuItemProp {
   label: string;
   icon: IconDefinition;
   url: string;
+  roles: string[];
 }
 
 interface Props {
@@ -44,16 +46,25 @@ export const MainAppBar = ({ user }: Props) => {
       label: 'Contacts',
       icon: faAddressBook,
       url: '/contacts',
+      roles: ['customer'],
     },
     {
       label: 'Groups',
       icon: faPeopleGroup,
       url: '/contact-groups',
+      roles: ['customer'],
     },
     {
       label: 'Broadcast',
       icon: faBullhorn,
       url: '/broadcasts',
+      roles: ['customer'],
+    },
+    {
+      label: 'Users',
+      icon: faUserGroup,
+      url: '/users',
+      roles: ['superadmin', 'customer'],
     },
   ];
 
@@ -107,6 +118,13 @@ export const MainAppBar = ({ user }: Props) => {
     },
   }));
 
+  const getRoleMenus = (): MenuItemProp[] => {
+    if (!user) {
+      return [];
+    }
+    return pages.filter((page) => page.roles.includes(user.role));
+  };
+
   return (
     <Box className="tw-bg-slate-100">
       <Container maxWidth="xxl">
@@ -134,7 +152,7 @@ export const MainAppBar = ({ user }: Props) => {
               flexItem
               className="tw-h-6 tw-self-center"
             />
-            {pages.map((page) => (
+            {getRoleMenus().map((page) => (
               <Link to={page.url} key={page.label}>
                 <Button
                   size="small"
