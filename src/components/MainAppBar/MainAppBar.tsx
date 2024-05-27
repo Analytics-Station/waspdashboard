@@ -2,6 +2,7 @@ import {
   faAddressBook,
   faBullhorn,
   faPeopleGroup,
+  faSitemap,
   faUserGroup,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
@@ -65,6 +66,12 @@ export const MainAppBar = ({ user }: Props) => {
       icon: faUserGroup,
       url: '/users',
       roles: ['superadmin', 'customer'],
+    },
+    {
+      label: 'Organisations',
+      icon: faSitemap,
+      url: '/organisations',
+      roles: ['superadmin'],
     },
   ];
 

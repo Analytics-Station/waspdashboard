@@ -17,6 +17,8 @@ import {
   NewBroadcast,
   NewBroadcastTemplate,
   NewTemplateVariable,
+  OrganisationList,
+  Organisations,
   Register,
   SignIn,
   UserList,
@@ -59,6 +61,9 @@ export const AppRoutes = () => {
         </Route>
         <Route path="users" element={<Users />}>
           <Route path="" element={<UserList />} />
+        </Route>
+        <Route path="organisations" element={<Organisations />}>
+          <Route path="" element={<OrganisationList />} />
         </Route>
         <Route path="" element={<Navigate to="contacts" />} />
       </Route>
