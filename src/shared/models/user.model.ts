@@ -1,6 +1,14 @@
 import parsePhoneNumber from 'libphonenumber-js';
 
+import { Organisation } from './organisation.model';
 import { PaginationMeta } from './pagination.model';
+
+export const organisationRoles = [
+  [2, 'Organisation Administrator'],
+  [3, 'Organisation Manager'],
+];
+
+export const appRoles = [[1, 'Super Administrator'], ...organisationRoles];
 
 export class User {
   public id: string;
@@ -8,7 +16,7 @@ export class User {
   public email: string;
   public phone: string;
   public profilePic: string;
-  public role: string;
+  public role: number;
   public createdAt: Date;
 
   constructor(data: any) {
@@ -30,12 +38,8 @@ export class User {
   }
 
   getRole(): string {
-    switch (this.role) {
-      case 'superadmin':
-        return 'Super administrator';
-      default:
-        return this.role;
-    }
+    const role = appRoles.find((item) => item[0] === this.role);
+    return role ? `${role[1]}` : 'Invalid role';
   }
 }
 
@@ -48,5 +52,15 @@ export class UserResponse {
     this._meta = data._meta
       ? new PaginationMeta(data._meta)
       : new PaginationMeta({});
+  }
+}
+
+export class UserFormDataResponse {
+  public organisations: Organisation[];
+
+  constructor(data: any) {
+    this.organisations = data.organisations
+      ? data.organisations.map((item: any) => new Organisation(item))
+      : [];
   }
 }

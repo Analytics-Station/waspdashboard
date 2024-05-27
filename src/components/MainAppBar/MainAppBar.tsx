@@ -32,7 +32,7 @@ interface MenuItemProp {
   label: string;
   icon: IconDefinition;
   url: string;
-  roles: string[];
+  roles: number[];
 }
 
 interface Props {
@@ -47,31 +47,31 @@ export const MainAppBar = ({ user }: Props) => {
       label: 'Contacts',
       icon: faAddressBook,
       url: '/contacts',
-      roles: ['customer'],
+      roles: [2, 3],
     },
     {
       label: 'Groups',
       icon: faPeopleGroup,
       url: '/contact-groups',
-      roles: ['customer'],
+      roles: [2, 3],
     },
     {
       label: 'Broadcast',
       icon: faBullhorn,
       url: '/broadcasts',
-      roles: ['customer'],
+      roles: [2, 3],
     },
     {
       label: 'Users',
       icon: faUserGroup,
       url: '/users',
-      roles: ['superadmin', 'customer'],
+      roles: [1, 2],
     },
     {
       label: 'Organisations',
       icon: faSitemap,
       url: '/organisations',
-      roles: ['superadmin'],
+      roles: [1],
     },
   ];
 

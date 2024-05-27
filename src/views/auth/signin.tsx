@@ -21,6 +21,7 @@ import {
   LoginRequest,
   LoginResponse,
   makeRequest,
+  organisationRoles,
   RequestMethod,
 } from '../../shared';
 
@@ -66,7 +67,15 @@ export const SignIn = () => {
       );
       localStorage.setItem(LocalStorageItem.Token, response.message.token);
       authService.setUserLoggedIn();
-      navigate('/');
+      if (
+        organisationRoles
+          .map((item) => item[0])
+          .includes(response.message.user.role)
+      ) {
+        navigate('/contacts');
+      } else {
+        navigate('/users');
+      }
     } catch (e) {
       setAlertMessage(`${e}`);
     }

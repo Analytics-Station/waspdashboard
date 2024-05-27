@@ -22,6 +22,7 @@ import {
   User,
   UserResponse,
 } from '../../../shared';
+import { NewUser } from './newUser';
 
 const FormSchema = yup
   .object({
@@ -189,6 +190,17 @@ export const UserList = () => {
           );
         }}
         pageSizeOptions={[10, 20, 50, 100]}
+      />
+
+      <NewUser
+        open={showNewUser}
+        onCloseClicked={() => {
+          setShowNewUser(false);
+          fetchUsers();
+        }}
+        userSaved={() => {
+          fetchUsers();
+        }}
       />
     </>
   );
