@@ -57,10 +57,12 @@ export class UserResponse {
 
 export class UserFormDataResponse {
   public organisations: Organisation[];
+  public roles: any[];
 
   constructor(data: any) {
     this.organisations = data.organisations
       ? data.organisations.map((item: any) => new Organisation(item))
       : [];
+    this.roles = data.roles ? data.roles : [];
   }
 }

@@ -15,6 +15,7 @@ import {
   BroadcastTemplateFormdata,
   BroadcastTemplateVariable,
   makeRequest,
+  RequestMethod,
 } from '../../../../shared';
 
 interface Props {
@@ -36,7 +37,9 @@ export const SelectTemplateVariable = ({
 
   const fetchFormData = async () => {
     const response = await makeRequest<null, BroadcastTemplateFormdata>(
-      `/broadcast-templates/formdata`
+      `/broadcast-templates/formdata`,
+      RequestMethod.GET,
+      true
     );
     const message = new BroadcastTemplateFormdata(response.message);
     setVariables(message.variables);

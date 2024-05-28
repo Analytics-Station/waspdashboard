@@ -19,6 +19,7 @@ import {
   ContactResponse,
   makeRequest,
   PaginationMeta,
+  RequestMethod,
 } from '../../../shared';
 
 interface Props {
@@ -60,7 +61,9 @@ export const AddRemoveGroupUsersDialog = ({
 
   const fetchContactGroupContacts = async (contactGroup: ContactGroup) => {
     const response = await makeRequest<null, ContactGroupContactListResponse>(
-      `/contact-groups/${contactGroup.id}/contacts`
+      `/contact-groups/${contactGroup.id}/contacts`,
+      RequestMethod.GET,
+      true
     );
     const message = new ContactGroupContactListResponse(response.message);
     setAssignedContacts(message.contacts);
@@ -68,7 +71,9 @@ export const AddRemoveGroupUsersDialog = ({
 
   const fetchContacts = async () => {
     const response = await makeRequest<null, ContactResponse>(
-      `/contacts?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`
+      `/contacts?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`,
+      RequestMethod.GET,
+      true
     );
     const message = new ContactResponse(response.message);
     setContacts(message.list);

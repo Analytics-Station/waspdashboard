@@ -19,6 +19,7 @@ import * as yup from 'yup';
 import {
   makeRequest,
   PaginationMeta,
+  RequestMethod,
   User,
   UserResponse,
 } from '../../../shared';
@@ -61,7 +62,9 @@ export const UserList = () => {
 
   const fetchUsers = async () => {
     const response = await makeRequest<null, UserResponse>(
-      `/users?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`
+      `/users?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`,
+      RequestMethod.GET,
+      true
     );
     const message = new UserResponse(response.message);
     setUsers(message.list);

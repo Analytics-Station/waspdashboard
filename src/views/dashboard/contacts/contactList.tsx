@@ -68,7 +68,9 @@ export const ContactList = () => {
 
   const fetchContacts = async () => {
     const response = await makeRequest<null, ContactResponse>(
-      `/contacts?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`
+      `/contacts?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`,
+      RequestMethod.GET,
+      true
     );
     const message = new ContactResponse(response.message);
     setContacts(message.list);
@@ -79,7 +81,8 @@ export const ContactList = () => {
     try {
       const response = await makeRequest<null, null>(
         `/contacts/${selectedContact?.id}`,
-        RequestMethod.DELETE
+        RequestMethod.DELETE,
+        true
       );
     } catch (e) {
       console.log(e);

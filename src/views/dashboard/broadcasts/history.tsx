@@ -9,6 +9,7 @@ import {
   BroadcastResponse,
   makeRequest,
   PaginationMeta,
+  RequestMethod,
 } from '../../../shared';
 
 export const BroadcastHistory = () => {
@@ -23,7 +24,9 @@ export const BroadcastHistory = () => {
 
   const fetchBroadcasts = async () => {
     const response = await makeRequest<null, BroadcastResponse>(
-      `/broadcasts?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`
+      `/broadcasts?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`,
+      RequestMethod.GET,
+      true
     );
     const message = new BroadcastResponse(response.message);
     setBroadcasts(message.list);

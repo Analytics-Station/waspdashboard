@@ -61,7 +61,7 @@ export const NewOrganisation = ({
       const response = await makeRequest(
         '/organisations',
         RequestMethod.POST,
-        false,
+        true,
         {
           name: data.name,
           phoneId: data.phoneId,

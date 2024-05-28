@@ -55,7 +55,7 @@ export const NewContactGroup = ({
       const response = await makeRequest(
         '/contact-groups',
         RequestMethod.POST,
-        false,
+        true,
         {
           name: data.name,
         }

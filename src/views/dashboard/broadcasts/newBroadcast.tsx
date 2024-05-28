@@ -73,6 +73,7 @@ export const NewBroadcast = () => {
   const [fileDetails, setFileDetails] = useState<FileInfo | null>(null);
 
   const watchTemplateId = watch('templateId');
+  const watchHeaderFile = watch('headerFile');
 
   useEffect(() => {
     fetchBroadcastFormdata();
@@ -80,7 +81,9 @@ export const NewBroadcast = () => {
 
   const fetchBroadcastFormdata = async () => {
     const response = await makeRequest<null, BroadcastFormDataResponse>(
-      `/broadcasts/formdata`
+      `/broadcasts/formdata`,
+      RequestMethod.GET,
+      true
     );
     const message = new BroadcastFormDataResponse(response.message);
     setContacts(message.contacts);
@@ -105,7 +108,7 @@ export const NewBroadcast = () => {
       const response = await makeRequest(
         '/broadcasts',
         RequestMethod.POST,
-        false,
+        true,
         payload
       );
       navigate('/broadcasts/history');
@@ -169,6 +172,7 @@ export const NewBroadcast = () => {
 
   const disableForm = (): boolean => {
     if (!isValid || !isDirty) {
+      console.log('ehh');
       return true;
     }
 
@@ -176,13 +180,8 @@ export const NewBroadcast = () => {
       (template) => template.id === +watchTemplateId
     );
 
-    if (
-      !(
-        selectedTemplate &&
-        selectedTemplate.hasImage &&
-        getValues('headerFile')
-      )
-    ) {
+    if (!(selectedTemplate && selectedTemplate.hasImage && watchHeaderFile)) {
+      console.log(selectedTemplate, selectedTemplate?.hasImage);
       return true;
     }
 

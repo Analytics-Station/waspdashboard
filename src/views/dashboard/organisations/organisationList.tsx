@@ -14,6 +14,7 @@ import {
   Organisation,
   OrganisationResponse,
   PaginationMeta,
+  RequestMethod,
 } from '../../../shared';
 import { NewOrganisation } from './newOrganisation';
 
@@ -55,7 +56,9 @@ export const OrganisationList = () => {
 
   const fetchOrganisations = async () => {
     const response = await makeRequest<null, OrganisationResponse>(
-      `/organisations?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`
+      `/organisations?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`,
+      RequestMethod.GET,
+      true
     );
     const message = new OrganisationResponse(response.message);
     setOrganisations(message.list);

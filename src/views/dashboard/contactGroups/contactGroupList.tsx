@@ -75,7 +75,9 @@ export const ContactGroupList = () => {
 
   const fetchContactGroups = async () => {
     const response = await makeRequest<null, ContactGroupResponse>(
-      `/contact-groups?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`
+      `/contact-groups?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}&q=${searchQuery}`,
+      RequestMethod.GET,
+      true
     );
     const message = new ContactGroupResponse(response.message);
     setContactGroups(message.list);
@@ -86,7 +88,8 @@ export const ContactGroupList = () => {
     try {
       const response = await makeRequest<null, null>(
         `/contact-groups/${selectedContactGroup?.id}`,
-        RequestMethod.DELETE
+        RequestMethod.DELETE,
+        true
       );
     } catch (e) {
       console.log(e);

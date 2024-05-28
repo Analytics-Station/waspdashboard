@@ -57,12 +57,12 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
       const response = await makeRequest(
         '/contacts',
         RequestMethod.POST,
-        false,
+        true,
         {
           contacts: [
             {
               name: data.name,
-              phone: data.phone,
+              phone: `+${data.phone}`,
               broadcast: data.broadcast,
             },
           ],

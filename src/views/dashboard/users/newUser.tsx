@@ -19,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import {
+  AuthService,
   makeRequest,
   Organisation,
   RequestMethod,
@@ -44,12 +45,6 @@ const FormSchema = yup
   })
   .required();
 
-const roles = [
-  'Super Administrator',
-  'Organisation Administrator',
-  'Organisation Manager',
-];
-
 export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
   const {
     handleSubmit,
@@ -71,7 +66,10 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
 
   const [loading, setLoading] = useState(false);
   const [organisationList, setOrganisationList] = useState<Organisation[]>([]);
+  const [roleList, setRoleList] = useState<any[]>([]);
   const watchRole = watch('role');
+
+  const authService = new AuthService();
 
   useEffect(() => {
     fetchUserFormData();
@@ -79,10 +77,13 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
 
   const fetchUserFormData = async () => {
     const response = await makeRequest<null, UserFormDataResponse>(
-      `/users/formdata`
+      `/users/formdata`,
+      RequestMethod.GET,
+      true
     );
     const message = new UserFormDataResponse(response.message);
     setOrganisationList(message.organisations);
+    setRoleList(message.roles);
   };
 
   const onSubmit = async (data: any) => {
@@ -91,7 +92,7 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
       const payload: any = {
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: `+${data.phone}`,
       };
 
       if (data.role > 0) {
@@ -104,7 +105,7 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
       const response = await makeRequest(
         '/users',
         RequestMethod.POST,
-        false,
+        true,
         payload
       );
       onClose();
@@ -212,9 +213,9 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
                   <MenuItem value={-1} disabled>
                     Select role
                   </MenuItem>
-                  {roles.map((role, index) => (
-                    <MenuItem key={role} value={index}>
-                      {role}
+                  {roleList.map((role) => (
+                    <MenuItem key={role} value={role[0]}>
+                      {role[1]}
                     </MenuItem>
                   ))}
                 </Select>
@@ -222,39 +223,44 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
             )}
           />
 
-          {[1, 2].includes(watchRole || -1) && (
-            <Controller
-              name="organisationId"
-              control={control}
-              render={({ field: { ref, onChange, onBlur, ...field } }) => (
-                <FormControl fullWidth className="tw-mt-4 tw-mb-2" size="small">
-                  <InputLabel id="organisationId">
-                    Select organisation
-                  </InputLabel>
-                  <Select
-                    labelId="organisationId"
-                    label="Select organisation"
-                    {...field}
-                    ref={ref}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    error={!!errors.organisationId}
+          {authService.getUserRole() === 1 &&
+            [1, 2].includes(watchRole || -1) && (
+              <Controller
+                name="organisationId"
+                control={control}
+                render={({ field: { ref, onChange, onBlur, ...field } }) => (
+                  <FormControl
                     fullWidth
-                    placeholder="Organisation name"
+                    className="tw-mt-4 tw-mb-2"
+                    size="small"
                   >
-                    <MenuItem value={-1} disabled>
+                    <InputLabel id="organisationId">
                       Select organisation
-                    </MenuItem>
-                    {organisationList.map((organisation) => (
-                      <MenuItem key={organisation.id} value={organisation.id}>
-                        {organisation.name}
+                    </InputLabel>
+                    <Select
+                      labelId="organisationId"
+                      label="Select organisation"
+                      {...field}
+                      ref={ref}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      error={!!errors.organisationId}
+                      fullWidth
+                      placeholder="Organisation name"
+                    >
+                      <MenuItem value={-1} disabled>
+                        Select organisation
                       </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
-          )}
+                      {organisationList.map((organisation) => (
+                        <MenuItem key={organisation.id} value={organisation.id}>
+                          {organisation.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            )}
         </DialogContent>
         <Divider />
         <DialogActions>

@@ -9,6 +9,8 @@ import {
 } from '../models';
 
 export class AuthService {
+  public loggedUser: User = new User({});
+
   isUserLoggedIn = (): boolean => {
     const logged = localStorage.getItem(LocalStorageItem.Logged);
     return logged ? parseInt(logged) === 1 : false;
@@ -16,6 +18,11 @@ export class AuthService {
 
   setUserLoggedIn = () => {
     localStorage.setItem(LocalStorageItem.Logged, '1');
+  };
+
+  getUserRole = (): number => {
+    const userRole = localStorage.getItem(LocalStorageItem.Role);
+    return userRole ? parseInt(userRole) : 0;
   };
 
   verifyToken = async (navigate: NavigateFunction, location: Location) => {
@@ -35,7 +42,12 @@ export class AuthService {
       if (this.isAuthRoute(location.pathname)) {
         navigate('/');
       }
-      return Promise.resolve(new User(response.message.user));
+      this.loggedUser = new User(response.message.user);
+      localStorage.setItem(
+        LocalStorageItem.Role,
+        this.loggedUser.role.toString()
+      );
+      return Promise.resolve(this.loggedUser);
     } catch (e) {
       this.logoutUser(navigate);
       return Promise.reject(e);

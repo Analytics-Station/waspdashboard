@@ -51,7 +51,7 @@ export const NewTemplateVariable = () => {
       const response = await makeRequest(
         '/broadcast-templates/variables',
         RequestMethod.POST,
-        false,
+        true,
         {
           name: data.name,
           value: data.value,

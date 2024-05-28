@@ -34,7 +34,9 @@ export const BroadcastTemplateVariables = () => {
 
   const fetchBroadcastTemplateVariables = async () => {
     const response = await makeRequest<null, BroadcastTemplateVariableResponse>(
-      `/broadcast-templates/variables?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`
+      `/broadcast-templates/variables?perPage=${pagination.perPage}&currentPage=${pagination.currentPage}`,
+      RequestMethod.GET,
+      true
     );
     const message = new BroadcastTemplateVariableResponse(response.message);
     setBroadcastTemplateVariables(message.list);
@@ -45,7 +47,8 @@ export const BroadcastTemplateVariables = () => {
     try {
       const response = await makeRequest<null, null>(
         `/broadcast-templates/variables/${selectedBroadcastTemplateVariable?.id}`,
-        RequestMethod.DELETE
+        RequestMethod.DELETE,
+        true
       );
     } catch (e) {
       console.log(e);
