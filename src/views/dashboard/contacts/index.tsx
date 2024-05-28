@@ -2,26 +2,9 @@ import { Button, Container, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import {
-  fbLogin,
-  getFacebookLoginStatus,
-  initFacebookSdk,
-} from '../../../shared';
+import { fbLogin } from '../../../shared';
 
 export const Contacts = () => {
-  useEffect(() => {
-    initFacebookSdk().then(() => {
-      console.log('first');
-      getFacebookLoginStatus().then((response) => {
-        if (response == null) {
-          console.log('No login status for the person');
-        } else {
-          console.log(response);
-        }
-      });
-    });
-  }, []);
-
   function login() {
     console.log('reached log in button');
     fbLogin().then((response: any) => {
@@ -30,6 +13,14 @@ export const Contacts = () => {
         console.log('Person is connected');
       } else {
         // something
+      }
+
+      if (response.authResponse) {
+        const accessToken = response.authResponse.accessToken;
+        //Use this token to call the debug_token API and get the shared WABA's ID
+        console.log('accessToken', accessToken);
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
       }
     });
   }
