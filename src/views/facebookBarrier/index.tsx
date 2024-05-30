@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 
 import { MainAppBar } from '../../components';
-import { fbLogin } from '../../shared';
+import { fbLogin, makeRequest, RequestMethod } from '../../shared';
 
 export const FacebookBarrier = () => {
   const loginFB = () => {
@@ -16,14 +16,32 @@ export const FacebookBarrier = () => {
         // something
       }
 
-      if (response.authResponse) {
-        const accessToken = response.authResponse;
+      if (response.code) {
+        const accessToken = response.code;
         //Use this token to call the debug_token API and get the shared WABA's ID
         console.log('accessToken', accessToken);
+        verifyToken(accessToken);
       } else {
         console.log('User cancelled login or did not fully authorize.');
       }
     });
+  };
+
+  const verifyToken = async (token: string) => {
+    try {
+      const response = await makeRequest<any, any>(
+        '/facebook/verify-debug-token',
+        RequestMethod.POST,
+        true,
+        {
+          token,
+        }
+      );
+      return Promise.resolve(response);
+    } catch (e) {
+      console.error(e);
+      Promise.reject(e);
+    }
   };
 
   return (
