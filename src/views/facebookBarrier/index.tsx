@@ -1,18 +1,11 @@
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import { useEffect } from 'react';
 
 import { MainAppBar } from '../../components';
-import { fbLogin, initFacebookSdk } from '../../shared';
+import { fbLogin } from '../../shared';
 
 export const FacebookBarrier = () => {
-  useEffect(() => {
-    return () => {
-      initFacebookSdk();
-    };
-  }, []);
-
   const loginFB = () => {
     console.log('reached log in button');
     fbLogin().then((response: any) => {
