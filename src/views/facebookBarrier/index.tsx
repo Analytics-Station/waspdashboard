@@ -61,7 +61,7 @@ export const FacebookBarrier = () => {
                 variant="h4"
                 className="tw-font-bold tw-w-2/3 tw-mx-auto tw-mb-4"
               >
-                Please log in your facebook account to continue
+                Please log in with your facebook account to continue
               </Typography>
               <Button
                 variant="contained"
