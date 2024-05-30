@@ -1,19 +1,19 @@
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
 import { MainAppBar } from '../../components';
+import { useAppDispatch, validateToken } from '../../redux';
 import { fbLogin, makeRequest, RequestMethod } from '../../shared';
 
 export const FacebookBarrier = () => {
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const loginFB = async () => {
     const response: any = await fbLogin();
     if (response.authResponse) {
       const accessToken = response.authResponse.code;
       await verifyToken(accessToken);
-      navigate('/');
+      dispatch(validateToken());
     } else {
       console.log('User cancelled login or did not fully authorize.');
     }
