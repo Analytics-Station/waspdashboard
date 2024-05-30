@@ -16,8 +16,8 @@ export const FacebookBarrier = () => {
         // something
       }
 
-      if (response.code) {
-        const accessToken = response.code;
+      if (response.authResponse) {
+        const accessToken = response.authResponse.code;
         //Use this token to call the debug_token API and get the shared WABA's ID
         console.log('accessToken', accessToken);
         verifyToken(accessToken);
