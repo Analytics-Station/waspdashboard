@@ -6,25 +6,14 @@ import { MainAppBar } from '../../components';
 import { fbLogin, makeRequest, RequestMethod } from '../../shared';
 
 export const FacebookBarrier = () => {
-  const loginFB = () => {
-    console.log('reached log in button');
-    fbLogin().then((response: any) => {
-      console.log(response);
-      if (response.status === 'connected') {
-        console.log('Person is connected');
-      } else {
-        // something
-      }
-
-      if (response.authResponse) {
-        const accessToken = response.authResponse.code;
-        //Use this token to call the debug_token API and get the shared WABA's ID
-        console.log('accessToken', accessToken);
-        verifyToken(accessToken);
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
-      }
-    });
+  const loginFB = async () => {
+    const response: any = await fbLogin();
+    if (response.authResponse) {
+      const accessToken = response.authResponse.code;
+      await verifyToken(accessToken);
+    } else {
+      console.log('User cancelled login or did not fully authorize.');
+    }
   };
 
   const verifyToken = async (token: string) => {

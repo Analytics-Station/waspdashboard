@@ -1,5 +1,10 @@
 import { useSelector } from 'react-redux';
-import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from 'react-router-dom';
 
 import { RootState } from '../redux';
 import {
@@ -24,7 +29,13 @@ import {
   UserList,
   Users,
 } from '../views';
-import { RedirectDashboard, RequireAuth, RequireOrganisationRole, RequireVerification } from './Auth';
+import {
+  RedirectDashboard,
+  RedirectVerification,
+  RequireAuth,
+  RequireOrganisationRole,
+  RequireVerification,
+} from './Auth';
 
 export const AppRoutes = () => {
   const loggedUser = useSelector((state: RootState) => state.auth.user);
@@ -56,7 +67,9 @@ export const AppRoutes = () => {
       path: '/facebook-login',
       element: (
         <RequireAuth>
-          <FacebookBarrier />
+          <RedirectVerification>
+            <FacebookBarrier />
+          </RedirectVerification>
         </RequireAuth>
       ),
     },
