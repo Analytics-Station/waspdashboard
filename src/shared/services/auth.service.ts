@@ -1,12 +1,7 @@
 import { Location, NavigateFunction } from 'react-router-dom';
 
 import { makeRequest } from '../helpers';
-import {
-  LocalStorageItem,
-  LoginResponse,
-  RequestMethod,
-  User,
-} from '../models';
+import { LocalStorageItem, LoginResponse, RequestMethod, User } from '../models';
 
 export class AuthService {
   public loggedUser: User = new User({});
@@ -39,9 +34,6 @@ export class AuthService {
       );
       localStorage.setItem(LocalStorageItem.Token, response.message.token);
       this.setUserLoggedIn();
-      if (this.isAuthRoute(location.pathname)) {
-        navigate('/');
-      }
       this.loggedUser = new User(response.message.user);
       localStorage.setItem(
         LocalStorageItem.Role,
@@ -52,11 +44,6 @@ export class AuthService {
       this.logoutUser(navigate);
       return Promise.reject(e);
     }
-  };
-
-  isAuthRoute = (route: string) => {
-    const routeChunks = route.split('/');
-    return routeChunks.length > 1 && routeChunks[1] === 'auth';
   };
 
   logoutUser = async (navigate: NavigateFunction) => {

@@ -17,6 +17,7 @@ export class User {
   public phone: string;
   public profilePic: string;
   public role: number;
+  public organisation: Organisation;
   public createdAt: Date;
 
   constructor(data: any) {
@@ -26,6 +27,9 @@ export class User {
     this.phone = data.phone ? data.phone : null;
     this.profilePic = data.profilePic ? data.profilePic : null;
     this.role = data.role ? data.role : null;
+    this.organisation = data.organisation
+      ? new Organisation(data.organisation)
+      : new Organisation({});
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
   }
 
@@ -56,13 +60,9 @@ export class UserResponse {
 }
 
 export class UserFormDataResponse {
-  public organisations: Organisation[];
   public roles: any[];
 
   constructor(data: any) {
-    this.organisations = data.organisations
-      ? data.organisations.map((item: any) => new Organisation(item))
-      : [];
     this.roles = data.roles ? data.roles : [];
   }
 }

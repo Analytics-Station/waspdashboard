@@ -1,4 +1,4 @@
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import {
   Auth,
@@ -10,63 +10,163 @@ import {
   BroadcastTemplateVariables,
   BulkImportContacts,
   ContactGroupList,
-  ContactGroups,
   ContactList,
   Contacts,
   Dashboard,
+  FacebookBarrier,
   NewBroadcast,
   NewBroadcastTemplate,
   NewTemplateVariable,
-  OrganisationList,
-  Organisations,
   Register,
   SignIn,
   UserList,
   Users,
 } from '../views';
+import RequireAuth from './Auth/RequireAuth';
 
 export const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/auth" element={<Auth />}>
-        <Route path="signin" element={<SignIn />} />
-        <Route path="register" element={<Register />} />
-        <Route path="" element={<Navigate to="signin" />} />
-      </Route>
+  const router = createBrowserRouter([
+    {
+      path: '/auth',
+      element: (
+        <RequireAuth>
+          <Auth />
+        </RequireAuth>
+      ),
+      children: [
+        {
+          path: 'signin',
+          element: <SignIn />,
+        },
+        {
+          path: 'register',
+          element: <Register />,
+        },
+        {
+          path: '',
+          element: <Navigate to="signin" />,
+        },
+      ],
+    },
+    {
+      path: '',
+      element: <Dashboard />,
+      children: [
+        {
+          path: '/facebook-login',
+          element: <FacebookBarrier />,
+        },
+        {
+          path: 'contacts',
+          element: <Contacts />,
+          children: [
+            {
+              path: 'bulk-import',
+              element: <BulkImportContacts />,
+            },
+            {
+              path: 'list',
+              element: <ContactList />,
+            },
+            {
+              path: 'groups',
+              element: <ContactGroupList />,
+            },
+            {
+              path: '',
+              element: <Navigate to="list" />,
+            },
+          ],
+        },
+        {
+          path: 'broadcasts',
+          element: <Broadcast />,
+          children: [
+            {
+              path: 'new',
+              element: <NewBroadcast />,
+            },
+            {
+              path: 'history',
+              element: <BroadcastHistory />,
+            },
+            {
+              path: 'scheduled',
+              element: <BroadcastScheduled />,
+            },
+            {
+              path: 'templates/new',
+              element: <NewBroadcastTemplate />,
+            },
+            {
+              path: 'templates',
+              element: <BroadcastTemplates />,
+              children: [
+                {
+                  path: 'list',
+                  element: <BroadcastTemplateList />,
+                },
+                {
+                  path: 'variables',
+                  element: <Outlet />,
+                  children: [
+                    {
+                      path: 'list',
+                      element: <BroadcastTemplateVariables />,
+                    },
+                    {
+                      path: 'new',
+                      element: <NewTemplateVariable />,
+                    },
+                    {
+                      path: '',
+                      element: <Navigate to="list" />,
+                    },
+                  ],
+                },
+                {
+                  path: '',
+                  element: <Navigate to="list" />,
+                },
+              ],
+            },
+            {
+              path: 'new-template',
+              element: <NewBroadcastTemplate />,
+            },
+            {
+              path: '',
+              element: <Navigate to="history" />,
+            },
+          ],
+        },
+        {
+          path: 'users',
+          element: <Users />,
+          children: [
+            {
+              path: '',
+              element: <UserList />,
+            },
+          ],
+        },
+        // {
+        //   path: 'organisations',
+        //   element: <Organisations />,
+        //   children: [
+        //     {
+        //       path: '',
+        //       element: <OrganisationList />,
+        //     },
+        //   ],
+        // },
+        {
+          path: '',
+          element: <Navigate to="contacts" />,
+        },
+      ],
+    },
+  ]);
 
-      <Route path="" element={<Dashboard />}>
-        <Route path="contacts" element={<Contacts />}>
-          <Route path="" element={<ContactList />} />
-          <Route path="bulk-import" element={<BulkImportContacts />} />
-        </Route>
-        <Route path="contact-groups" element={<ContactGroups />}>
-          <Route path="" element={<ContactGroupList />} />
-        </Route>
-        <Route path="broadcasts" element={<Broadcast />}>
-          <Route path="" element={<Navigate to="history" />} />
-          <Route path="new" element={<NewBroadcast />} />
-          <Route path="history" element={<BroadcastHistory />} />
-          <Route path="scheduled" element={<BroadcastScheduled />} />
-          <Route path="templates/new" element={<NewBroadcastTemplate />} />
-          <Route path="templates" element={<BroadcastTemplates />}>
-            <Route path="list" element={<BroadcastTemplateList />} />
-            <Route path="variables" element={<Outlet />}>
-              <Route path="list" element={<BroadcastTemplateVariables />} />
-              <Route path="new" element={<NewTemplateVariable />} />
-              <Route path="" element={<Navigate to="list" />} />
-            </Route>
-            <Route path="" element={<Navigate to="list" />} />
-          </Route>
-          <Route path="new-template" element={<NewBroadcastTemplate />} />
-        </Route>
-        <Route path="users" element={<Users />}>
-          <Route path="" element={<UserList />} />
-        </Route>
-        <Route path="organisations" element={<Organisations />}>
-          <Route path="" element={<OrganisationList />} />
-        </Route>
-        <Route path="" element={<Navigate to="contacts" />} />
-      </Route>
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 };

@@ -1,3 +1,5 @@
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+
 export * from './response.model';
 export * from './localstorage.model';
 export * from './auth.model';
@@ -13,4 +15,10 @@ export * from './organisation.model';
 export interface FileInfo {
   fileName: string;
   fileUrl: string;
+}
+
+export interface MenuLink {
+  label: string;
+  url: string;
+  icon: IconDefinition;
 }

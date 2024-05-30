@@ -1,18 +1,7 @@
-import {
-  faTrashAlt,
-  faUserGroup,
-  faUserPlus,
-} from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faUserGroup, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  OutlinedInput,
-} from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, IconButton, OutlinedInput, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -21,13 +10,7 @@ import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
 import { DeleteDialog } from '../../../components';
-import {
-  ContactGroup,
-  ContactGroupResponse,
-  makeRequest,
-  PaginationMeta,
-  RequestMethod,
-} from '../../../shared';
+import { ContactGroup, ContactGroupResponse, makeRequest, PaginationMeta, RequestMethod } from '../../../shared';
 import { AddRemoveGroupUsersDialog } from './addRemoveGroupUsers';
 import { NewContactGroup } from './newContactGroup';
 
@@ -122,7 +105,14 @@ export const ContactGroupList = () => {
   };
 
   return (
-    <>
+    <Container maxWidth="xxl" className="tw-pt-12">
+      <Typography variant="h4" className="tw-font-black">
+        Contact groups
+      </Typography>
+      <Typography variant="subtitle1" className="tw-mt-4 tw-w-4/12">
+        Contact list stores the list of numbers that you've interacted with. You
+        can even manually export or import contacts.
+      </Typography>
       <Box className="tw-bg-slate-100 tw-p-6 tw-mt-8 tw-mb-4 tw-rounded-lg">
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item sm={3}>
@@ -273,6 +263,6 @@ export const ContactGroupList = () => {
         onDeleteClicked={deleteContactGroup}
         loading={loading}
       />
-    </>
+    </Container>
   );
 };

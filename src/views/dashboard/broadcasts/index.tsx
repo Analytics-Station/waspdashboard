@@ -1,27 +1,9 @@
-import {
-  faAdd,
-  faBusinessTime,
-  faClock,
-  faFile,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faBusinessTime, faClock, faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Box,
-  Container,
-  Divider,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import { Box, Container, Divider, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-interface MenuLink {
-  label: string;
-  url: string;
-  icon: IconDefinition;
-}
+import { MenuLink } from '../../../shared';
 
 export const Broadcast = () => {
   const location = useLocation();

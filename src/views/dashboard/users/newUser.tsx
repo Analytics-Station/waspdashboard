@@ -18,13 +18,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import {
-  AuthService,
-  makeRequest,
-  Organisation,
-  RequestMethod,
-  UserFormDataResponse,
-} from '../../../shared';
+import { makeRequest, RequestMethod, UserFormDataResponse } from '../../../shared';
 
 interface Props {
   open: boolean;
@@ -41,7 +35,6 @@ const FormSchema = yup
       .min(10),
     email: yup.string().email(),
     role: yup.number(),
-    organisationId: yup.number(),
   })
   .required();
 
@@ -50,7 +43,6 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: 'all',
@@ -59,17 +51,12 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
       email: '',
       phone: '',
       role: -1,
-      organisationId: -1,
     },
     resolver: yupResolver(FormSchema),
   });
 
   const [loading, setLoading] = useState(false);
-  const [organisationList, setOrganisationList] = useState<Organisation[]>([]);
   const [roleList, setRoleList] = useState<any[]>([]);
-  const watchRole = watch('role');
-
-  const authService = new AuthService();
 
   useEffect(() => {
     fetchUserFormData();
@@ -82,7 +69,6 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
       true
     );
     const message = new UserFormDataResponse(response.message);
-    setOrganisationList(message.organisations);
     setRoleList(message.roles);
   };
 
@@ -97,9 +83,6 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
 
       if (data.role > 0) {
         payload['role'] = data.role;
-      }
-      if (data.organisationId > 0) {
-        payload['organisationId'] = data.organisationId;
       }
 
       const response = await makeRequest(
@@ -198,9 +181,9 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
             control={control}
             render={({ field: { ref, onChange, onBlur, ...field } }) => (
               <FormControl fullWidth className="tw-mt-4 tw-mb-2" size="small">
-                <InputLabel id="organisationId">Select role</InputLabel>
+                <InputLabel id="role">Select role</InputLabel>
                 <Select
-                  labelId="organisationId"
+                  labelId="role"
                   label="Select role"
                   {...field}
                   ref={ref}
@@ -222,45 +205,6 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
               </FormControl>
             )}
           />
-
-          {authService.getUserRole() === 1 &&
-            [1, 2].includes(watchRole || -1) && (
-              <Controller
-                name="organisationId"
-                control={control}
-                render={({ field: { ref, onChange, onBlur, ...field } }) => (
-                  <FormControl
-                    fullWidth
-                    className="tw-mt-4 tw-mb-2"
-                    size="small"
-                  >
-                    <InputLabel id="organisationId">
-                      Select organisation
-                    </InputLabel>
-                    <Select
-                      labelId="organisationId"
-                      label="Select organisation"
-                      {...field}
-                      ref={ref}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      error={!!errors.organisationId}
-                      fullWidth
-                      placeholder="Organisation name"
-                    >
-                      <MenuItem value={-1} disabled>
-                        Select organisation
-                      </MenuItem>
-                      {organisationList.map((organisation) => (
-                        <MenuItem key={organisation.id} value={organisation.id}>
-                          {organisation.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-              />
-            )}
         </DialogContent>
         <Divider />
         <DialogActions>

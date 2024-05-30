@@ -1,11 +1,4 @@
-import {
-  faAddressBook,
-  faBullhorn,
-  faPeopleGroup,
-  faSitemap,
-  faUserGroup,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faBullhorn, faUserGroup, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   AppBar,
@@ -50,12 +43,6 @@ export const MainAppBar = ({ user }: Props) => {
       roles: [2, 3],
     },
     {
-      label: 'Groups',
-      icon: faPeopleGroup,
-      url: '/contact-groups',
-      roles: [2, 3],
-    },
-    {
       label: 'Broadcast',
       icon: faBullhorn,
       url: '/broadcasts',
@@ -65,12 +52,6 @@ export const MainAppBar = ({ user }: Props) => {
       label: 'Users',
       icon: faUserGroup,
       url: '/users',
-      roles: [1, 2],
-    },
-    {
-      label: 'Organisations',
-      icon: faSitemap,
-      url: '/organisations',
       roles: [1],
     },
   ];
@@ -126,7 +107,13 @@ export const MainAppBar = ({ user }: Props) => {
   }));
 
   const getRoleMenus = (): MenuItemProp[] => {
-    if (!user) {
+    if (
+      !user
+      // ||
+      // ([2, 3].includes(user.role) &&
+      //   user.organisation &&
+      //   !user.organisation.verified)
+    ) {
       return [];
     }
     return pages.filter((page) => page.roles.includes(user.role));
@@ -153,12 +140,14 @@ export const MainAppBar = ({ user }: Props) => {
                 WASP
               </Typography>
             </Link>
-            <Divider
-              orientation="vertical"
-              variant="middle"
-              flexItem
-              className="tw-h-6 tw-self-center"
-            />
+            {getRoleMenus().length > 0 && (
+              <Divider
+                orientation="vertical"
+                variant="middle"
+                flexItem
+                className="tw-h-6 tw-self-center"
+              />
+            )}
             {getRoleMenus().map((page) => (
               <Link to={page.url} key={page.label}>
                 <Button
@@ -206,9 +195,15 @@ export const MainAppBar = ({ user }: Props) => {
               <MenuItem onClick={handleClose}>
                 <Typography variant="subtitle2">My profile</Typography>
               </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Typography variant="subtitle2">Preferences</Typography>
-              </MenuItem>
+              {[2, 3].includes(user.role) && (
+                <MenuItem onClick={handleClose}>
+                  <Link to="/users">
+                    <Typography variant="subtitle2">
+                      Organisation users
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              )}
               <Divider />
               <MenuItem onClick={logoutClicked}>
                 <Typography variant="subtitle2">Logout</Typography>

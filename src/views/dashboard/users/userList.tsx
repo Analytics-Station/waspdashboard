@@ -1,14 +1,7 @@
-import { faTrashAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  OutlinedInput,
-} from '@mui/material';
+import { Box, Button, FormControl, Grid, OutlinedInput } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -16,13 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
-import {
-  makeRequest,
-  PaginationMeta,
-  RequestMethod,
-  User,
-  UserResponse,
-} from '../../../shared';
+import { makeRequest, PaginationMeta, RequestMethod, User, UserResponse } from '../../../shared';
 import { NewUser } from './newUser';
 
 const FormSchema = yup
@@ -157,22 +144,22 @@ export const UserList = () => {
             },
             flex: 1,
           },
-          {
-            field: 'Actions',
-            renderCell: (params) => (
-              <IconButton
-                color="error"
-                size="small"
-                onClick={() => {
-                  setSelectedUser(params.row);
-                  setShowDeleteDialog(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </IconButton>
-            ),
-            flex: 1,
-          },
+          // {
+          //   field: 'Actions',
+          //   renderCell: (params) => (
+          //     <IconButton
+          //       color="error"
+          //       size="small"
+          //       onClick={() => {
+          //         setSelectedUser(params.row);
+          //         setShowDeleteDialog(true);
+          //       }}
+          //     >
+          //       <FontAwesomeIcon icon={faTrashAlt} />
+          //     </IconButton>
+          //   ),
+          //   flex: 1,
+          // },
         ]}
         rows={users}
         initialState={{
