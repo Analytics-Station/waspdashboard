@@ -45,6 +45,12 @@ export class User {
     const role = appRoles.find((item) => item[0] === this.role);
     return role ? `${role[1]}` : 'Invalid role';
   }
+
+  isOrganisationRole(): boolean {
+    return organisationRoles
+      .map((item) => item[0])
+      .includes(this.role.valueOf());
+  }
 }
 
 export class UserResponse {

@@ -1,5 +1,7 @@
+import { useSelector } from 'react-redux';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
+import { RootState } from '../redux';
 import {
   Auth,
   Broadcast,
@@ -22,16 +24,18 @@ import {
   UserList,
   Users,
 } from '../views';
-import RequireAuth from './Auth/RequireAuth';
+import { RedirectDashboard, RequireAuth, RequireOrganisationRole, RequireVerification } from './Auth';
 
 export const AppRoutes = () => {
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+
   const router = createBrowserRouter([
     {
       path: '/auth',
       element: (
-        <RequireAuth>
+        <RedirectDashboard>
           <Auth />
-        </RequireAuth>
+        </RedirectDashboard>
       ),
       children: [
         {
@@ -49,16 +53,30 @@ export const AppRoutes = () => {
       ],
     },
     {
+      path: '/facebook-login',
+      element: (
+        <RequireAuth>
+          <FacebookBarrier />
+        </RequireAuth>
+      ),
+    },
+    {
       path: '',
-      element: <Dashboard />,
+      element: (
+        <RequireAuth>
+          <RequireVerification>
+            <Dashboard />
+          </RequireVerification>
+        </RequireAuth>
+      ),
       children: [
         {
-          path: '/facebook-login',
-          element: <FacebookBarrier />,
-        },
-        {
           path: 'contacts',
-          element: <Contacts />,
+          element: (
+            <RequireOrganisationRole>
+              <Contacts />
+            </RequireOrganisationRole>
+          ),
           children: [
             {
               path: 'bulk-import',
@@ -80,7 +98,11 @@ export const AppRoutes = () => {
         },
         {
           path: 'broadcasts',
-          element: <Broadcast />,
+          element: (
+            <RequireOrganisationRole>
+              <Broadcast />
+            </RequireOrganisationRole>
+          ),
           children: [
             {
               path: 'new',
@@ -162,7 +184,11 @@ export const AppRoutes = () => {
         // },
         {
           path: '',
-          element: <Navigate to="contacts" />,
+          element: (
+            <Navigate
+              to={loggedUser?.isOrganisationRole() ? 'contacts' : 'users'}
+            />
+          ),
         },
       ],
     },

@@ -8,11 +8,11 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const RequireAuth = ({ children }: Props) => {
+export const RedirectDashboard = ({ children }: Props) => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
-  if (!isLoggedIn) {
-    return <Navigate to="/auth" replace />;
+  if (isLoggedIn) {
+    return <Navigate to="/" replace />;
   }
 
   return children;

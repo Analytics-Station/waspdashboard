@@ -17,9 +17,10 @@ import {
   Typography,
 } from '@mui/material';
 import { MouseEvent, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { AuthService, User } from '../../shared';
+import { logout, RootState, useAppDispatch } from '../../redux';
 
 interface MenuItemProp {
   label: string;
@@ -28,13 +29,11 @@ interface MenuItemProp {
   roles: number[];
 }
 
-interface Props {
-  user: User | null;
-}
-
-export const MainAppBar = ({ user }: Props) => {
+export const MainAppBar = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const authService = new AuthService();
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+
   const pages: MenuItemProp[] = [
     {
       label: 'Contacts',
@@ -66,8 +65,8 @@ export const MainAppBar = ({ user }: Props) => {
   };
 
   const logoutClicked = async () => {
-    await authService.logoutUser(navigate);
-    navigate('/auth/signin');
+    dispatch(logout());
+    // navigate('/auth/signin');
   };
 
   const StyledMenu = styled((props: MenuProps) => (
@@ -108,15 +107,14 @@ export const MainAppBar = ({ user }: Props) => {
 
   const getRoleMenus = (): MenuItemProp[] => {
     if (
-      !user
-      // ||
-      // ([2, 3].includes(user.role) &&
-      //   user.organisation &&
-      //   !user.organisation.verified)
+      !loggedUser ||
+      (loggedUser.isOrganisationRole() &&
+        loggedUser.organisation &&
+        !loggedUser.organisation.verified)
     ) {
       return [];
     }
-    return pages.filter((page) => page.roles.includes(user.role));
+    return pages.filter((page) => page.roles.includes(loggedUser.role));
   };
 
   return (
@@ -175,7 +173,7 @@ export const MainAppBar = ({ user }: Props) => {
               </IconButton>
             </Tooltip>
           </Toolbar>
-          {user && (
+          {loggedUser && (
             <StyledMenu
               anchorEl={anchorEl}
               open={open}
@@ -185,25 +183,27 @@ export const MainAppBar = ({ user }: Props) => {
             >
               <Box>
                 <Typography variant="subtitle2">
-                  <b>{user.name}</b>
+                  <b>{loggedUser.name}</b>
                 </Typography>
                 <Typography variant="subtitle2">
-                  {user.getFormattedPhone()}
+                  {loggedUser.getFormattedPhone()}
                 </Typography>
               </Box>
               <Divider />
               <MenuItem onClick={handleClose}>
                 <Typography variant="subtitle2">My profile</Typography>
               </MenuItem>
-              {[2, 3].includes(user.role) && (
-                <MenuItem onClick={handleClose}>
-                  <Link to="/users">
-                    <Typography variant="subtitle2">
-                      Organisation users
-                    </Typography>
-                  </Link>
-                </MenuItem>
-              )}
+              {loggedUser.isOrganisationRole() &&
+                loggedUser.organisation &&
+                loggedUser.organisation.verified && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to="/users">
+                      <Typography variant="subtitle2">
+                        Organisation users
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                )}
               <Divider />
               <MenuItem onClick={logoutClicked}>
                 <Typography variant="subtitle2">Logout</Typography>

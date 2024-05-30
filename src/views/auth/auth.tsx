@@ -1,13 +1,12 @@
 import { Container, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
-import { AuthService, LocalStorageItem } from '../../shared';
+import { useAppDispatch, validateToken } from '../../redux';
+import { LocalStorageItem } from '../../shared';
 
 export const Auth = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const authService = new AuthService();
+  const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(true);
 
@@ -16,10 +15,10 @@ export const Auth = () => {
   }, []);
 
   const checkUserLogged = async () => {
-    const token = localStorage.getItem(LocalStorageItem.Token);
+    const token = localStorage.getItem(LocalStorageItem.TOKEN);
     if (token) {
       try {
-        await authService.verifyToken(navigate, location);
+        await dispatch(validateToken());
       } catch (e) {
         console.log(e);
       }

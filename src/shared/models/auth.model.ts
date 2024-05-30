@@ -5,12 +5,21 @@ export interface LoginRequest {
   password: string;
 }
 
-export class LoginResponse {
-  public token: string;
-  public user: User;
+// export class LoginResponse {
+//   public token: string;
+//   public user: User;
 
-  constructor(data: any) {
-    this.token = data.token ? data.token : null;
-    this.user = data.user ? new User(data.user) : new User({});
-  }
+//   constructor(data: any) {
+//     this.token = data.token ? data.token : null;
+//     this.user = data.user ? new User(data.user) : new User({});
+//   }
+// }
+
+export interface LoginResponse {
+  token: string;
+  user: User;
+}
+
+export interface ValidateResponse {
+  user: User;
 }

@@ -2,28 +2,14 @@ import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import {
-  Alert,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
-import {
-  AuthService,
-  LocalStorageItem,
-  LoginRequest,
-  LoginResponse,
-  makeRequest,
-  organisationRoles,
-  RequestMethod,
-} from '../../shared';
+import { loginWithEmail, RootState, useAppDispatch } from '../../redux';
 
 const FormSchema = yup
   .object({
@@ -33,10 +19,9 @@ const FormSchema = yup
   .required();
 
 export const SignIn = () => {
-  const navigate = useNavigate();
-  const authService = new AuthService();
+  const dispatch = useAppDispatch();
+  const loading = useSelector((state: RootState) => state.app.loading);
 
-  const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
   const {
@@ -54,37 +39,7 @@ export const SignIn = () => {
   });
 
   const onSubmit = async (data: any) => {
-    setLoading(true);
-    try {
-      const response = await makeRequest<LoginRequest, LoginResponse>(
-        '/auth/signin',
-        RequestMethod.POST,
-        false,
-        {
-          email: data.email,
-          password: data.password,
-        }
-      );
-      localStorage.setItem(LocalStorageItem.Token, response.message.token);
-      authService.setUserLoggedIn();
-      if (
-        organisationRoles
-          .map((item) => item[0])
-          .includes(response.message.user.role)
-      ) {
-        navigate('/contacts');
-      } else {
-        navigate('/users');
-      }
-    } catch (e) {
-      setAlertMessage(`${e}`);
-    }
-    setLoading(false);
-    setValue('email', '');
-    setValue('password', '');
-    setTimeout(() => {
-      setAlertMessage('');
-    }, 5000);
+    dispatch(loginWithEmail(data));
   };
 
   return (

@@ -1,39 +1,36 @@
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 
 import { MainAppBar } from '../../components';
-import { AuthService, User } from '../../shared';
+import { RootState, useAppDispatch } from '../../redux';
 
 export const Dashboard = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const authService = new AuthService();
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
-  const [loggedUser, setLoggedUser] = useState<User>(new User({}));
+  // useEffect(() => {
+  //   authenticateUser();
+  // }, []);
 
-  useEffect(() => {
-    authenticateUser();
-  }, []);
+  // const authenticateUser = async () => {
+  //   try {
+  //     if (!isLoggedIn) {
+  //       dispatch(validateToken());
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
-  const authenticateUser = async () => {
-    try {
-      if (!authService.isUserLoggedIn()) {
-        const user = await authService.verifyToken(navigate, location);
-        setLoggedUser(user);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  if (!authService.isUserLoggedIn()) {
+  if (!isLoggedIn) {
     return null;
   }
 
   return (
     <Box className="tw-h-full tw-overflow-y-hidden tw-flex tw-flex-col">
-      <MainAppBar user={loggedUser} />
+      <MainAppBar />
       <Box className="tw-flex-1 tw-overflow-y-auto">
         <Outlet />
       </Box>

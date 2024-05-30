@@ -1,9 +1,4 @@
-import axios, {
-  AxiosError,
-  AxiosHeaders,
-  AxiosInstance,
-  AxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { AppResponse, LocalStorageItem, RequestMethod } from '../models';
 
@@ -25,7 +20,7 @@ export const makeRequest = async <RequestType, ResponseType>(
     if (headers) {
       newHeaders = headers;
     }
-    const token = localStorage.getItem(LocalStorageItem.Token);
+    const token = localStorage.getItem(LocalStorageItem.TOKEN);
     if (validate && token) {
       newHeaders.set('Authorization', `${token}`);
     }
