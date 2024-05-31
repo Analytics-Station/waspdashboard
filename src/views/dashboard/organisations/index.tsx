@@ -7,7 +7,7 @@ export const Organisations = () => {
       <Typography variant="h4" className="tw-font-black">
         Organisations
       </Typography>
-      <Typography variant="subtitle1" className="tw-mt-4 tw-w-4/12">
+      <Typography variant="subtitle1" className="tw-mt-4">
         List of all the organisations in the system.
       </Typography>
       <Outlet />
