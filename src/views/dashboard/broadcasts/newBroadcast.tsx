@@ -377,13 +377,6 @@ export const NewBroadcast = () => {
                 },
                 flex: 1,
               },
-              {
-                field: 'Allow broadcast',
-                valueFormatter: (val, row, col) => {
-                  return row.broadcast ? 'Yes' : 'No';
-                },
-                flex: 1,
-              },
             ]}
             rows={contacts}
             onRowSelectionModelChange={(model) => setValue('contacts', model)}
