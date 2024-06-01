@@ -74,6 +74,8 @@ export const NewBroadcast = () => {
 
   const watchTemplateId = watch('templateId');
   const watchHeaderFile = watch('headerFile');
+  const watchContacts = watch('contacts');
+  const watchContactGroups = watch('contactGroups');
 
   useEffect(() => {
     fetchBroadcastFormdata();
@@ -180,8 +182,11 @@ export const NewBroadcast = () => {
       (template) => template.id === +watchTemplateId
     );
 
-    if (!(selectedTemplate && selectedTemplate.hasImage && watchHeaderFile)) {
-      console.log(selectedTemplate, selectedTemplate?.hasImage);
+    if (selectedTemplate && selectedTemplate.hasImage && !watchHeaderFile) {
+      return true;
+    }
+
+    if (watchContactGroups.length === 0 && watchContacts.length === 0) {
       return true;
     }
 
