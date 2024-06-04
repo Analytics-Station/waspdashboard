@@ -13,8 +13,10 @@ import {
   OutlinedInput,
   Switch,
 } from '@mui/material';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { Country } from 'react-phone-number-input';
 import * as yup from 'yup';
 
 import { InputPhone } from '../../../components/PhoneInput/PhoneInput';
@@ -39,6 +41,7 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
     handleSubmit,
     control,
     setValue,
+    watch,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: 'all',
@@ -51,6 +54,8 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [currentCountry, setCurrentCountry] = useState<Country>('IN');
+  const watchPhone = watch('phone');
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -91,6 +96,9 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
 
   const disableForm = () => {
     if (!isValid || !isDirty) {
+      return true;
+    }
+    if (watchPhone && !isValidPhoneNumber(watchPhone, currentCountry)) {
       return true;
     }
     return false;
@@ -135,6 +143,7 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
                 error={!!errors.phone}
                 label="Phone number"
                 helperText={errors.phone ? errors.phone.message : ' '}
+                onCountryChanged={setCurrentCountry}
               />
             )}
           />

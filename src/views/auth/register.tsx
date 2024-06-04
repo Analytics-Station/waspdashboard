@@ -3,6 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { Country, isValidPhoneNumber } from 'react-phone-number-input';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
@@ -24,6 +25,7 @@ const FormSchema = yup
 
 export const Register = () => {
   const navigate = useNavigate();
+  const [currentCountry, setCurrentCountry] = useState<Country>('IN');
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -42,6 +44,7 @@ export const Register = () => {
     },
     resolver: yupResolver(FormSchema),
   });
+  const watchPhone = watch('phone');
   const watchPassword = watch('password');
   const watchCpassword = watch('cpassword');
 
@@ -74,6 +77,9 @@ export const Register = () => {
 
   const disableForm = (): boolean => {
     if (!isValid || !isDirty || loading) {
+      return true;
+    }
+    if (watchPhone && !isValidPhoneNumber(watchPhone, currentCountry)) {
       return true;
     }
     if (watchPassword !== watchCpassword) {
@@ -151,6 +157,7 @@ export const Register = () => {
                   error={!!errors.phone}
                   label="Phone number"
                   helperText={errors.phone ? errors.phone.message : ' '}
+                  onCountryChanged={setCurrentCountry}
                 />
               )}
             />

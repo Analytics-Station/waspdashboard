@@ -45,8 +45,15 @@ const MaterialInput = forwardRef(
 );
 
 export const InputPhone = (props: any) => {
-  const { value, defaultValue, defaultCountry, onChange, label, ...rest } =
-    props;
+  const {
+    value,
+    defaultValue,
+    defaultCountry,
+    onChange,
+    label,
+    onCountryChanged,
+    ...rest
+  } = props;
 
   const initial = value || defaultValue;
   const [selectedVal, setSelectedVal] = useState<string>(String(initial));
@@ -57,6 +64,11 @@ export const InputPhone = (props: any) => {
     if (onChange) {
       onChange(value);
     }
+  };
+
+  const countryChanged = (country: string) => {
+    setCountry(country);
+    onCountryChanged(country);
   };
 
   return (
@@ -72,7 +84,7 @@ export const InputPhone = (props: any) => {
       onChange={handleChange}
       inputComponent={MaterialInput}
       countryChanged={(e: ChangeEvent<HTMLInputElement>) => {
-        setCountry(e.target.value);
+        countryChanged(e.target.value);
       }}
     />
   );

@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { Country, isValidPhoneNumber } from 'react-phone-number-input';
 import * as yup from 'yup';
 
 import { InputPhone } from '../../../components/PhoneInput/PhoneInput';
@@ -48,6 +49,7 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
     handleSubmit,
     control,
     setValue,
+    watch,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: 'all',
@@ -61,7 +63,9 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [currentCountry, setCurrentCountry] = useState<Country>('IN');
   const [roleList, setRoleList] = useState<any[]>([]);
+  const watchPhone = watch('phone');
 
   useEffect(() => {
     fetchUserFormData();
@@ -112,6 +116,16 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
 
   const resetForm = () => {
     setValue('name', '');
+  };
+
+  const disableForm = () => {
+    if (!isValid || !isDirty) {
+      return true;
+    }
+    if (watchPhone && !isValidPhoneNumber(watchPhone, currentCountry)) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -169,10 +183,11 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
                 fullWidth
                 className="tw-mt-6"
                 onChange={onChange}
-                defaultCountry="IN"
+                defaultCountry={currentCountry}
                 error={!!errors.phone}
                 label="Phone number"
                 helperText={errors.phone ? errors.phone.message : ' '}
+                onCountryChanged={setCurrentCountry}
               />
             )}
           />
@@ -210,7 +225,7 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
         <Divider />
         <DialogActions>
           <LoadingButton
-            disabled={!isValid || !isDirty}
+            disabled={disableForm()}
             variant="contained"
             disableElevation
             type="submit"
