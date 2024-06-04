@@ -1,0 +1,14 @@
+.PhoneInputCountry {
+  display: none;
+}
+
+.countrySelect {
+  width: 3rem;
+  margin-right: 1rem;
+
+  .MuiInput-input {
+    border-radius: 0;
+    padding-top: 6px;
+    padding-bottom: 4px;
+  }
+}

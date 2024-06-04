@@ -18,7 +18,12 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { makeRequest, RequestMethod, UserFormDataResponse } from '../../../shared';
+import { InputPhone } from '../../../components/PhoneInput/PhoneInput';
+import {
+  makeRequest,
+  RequestMethod,
+  UserFormDataResponse,
+} from '../../../shared';
 
 interface Props {
   open: boolean;
@@ -78,7 +83,7 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
       const payload: any = {
         name: data.name,
         email: data.email,
-        phone: `+${data.phone}`,
+        phone: data.phone,
       };
 
       if (data.role > 0) {
@@ -158,21 +163,17 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
           <Controller
             name="phone"
             control={control}
-            render={({ field: { ref, onChange, onBlur, ...field } }) => (
-              <FormControl fullWidth className="tw-mt-4">
-                <FormLabel>Phone number</FormLabel>
-                <OutlinedInput
-                  {...field}
-                  ref={ref}
-                  size="small"
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  error={!!errors.name}
-                  fullWidth
-                  type="tel"
-                  placeholder="User's phone with (country code)"
-                />
-              </FormControl>
+            render={({ field: { ref, onChange, ...field } }) => (
+              <InputPhone
+                {...field}
+                fullWidth
+                className="tw-mt-6"
+                onChange={onChange}
+                defaultCountry="IN"
+                error={!!errors.phone}
+                label="Phone number"
+                helperText={errors.phone ? errors.phone.message : ' '}
+              />
             )}
           />
 
@@ -180,7 +181,7 @@ export const NewUser = ({ open, onCloseClicked, userSaved }: Props) => {
             name="role"
             control={control}
             render={({ field: { ref, onChange, onBlur, ...field } }) => (
-              <FormControl fullWidth className="tw-mt-4 tw-mb-2" size="small">
+              <FormControl fullWidth className="tw-mt-2 tw-mb-2" size="small">
                 <InputLabel id="role">Select role</InputLabel>
                 <Select
                   labelId="role"

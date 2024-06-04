@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { InputPhone } from '../../../components/PhoneInput/PhoneInput';
 import { makeRequest, RequestMethod } from '../../../shared';
 
 interface Props {
@@ -28,7 +29,7 @@ interface Props {
 const FormSchema = yup
   .object({
     name: yup.string().min(6),
-    phone: yup.string().min(11),
+    phone: yup.string().min(10),
     broadcast: yup.boolean(),
   })
   .required();
@@ -62,7 +63,7 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
           contacts: [
             {
               name: data.name,
-              phone: `+${data.phone}`,
+              phone: data.phone,
               broadcast: data.broadcast,
             },
           ],
@@ -86,6 +87,13 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
     setValue('name', '');
     setValue('phone', '');
     setValue('broadcast', true);
+  };
+
+  const disableForm = () => {
+    if (!isValid || !isDirty) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -117,21 +125,17 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
           <Controller
             name="phone"
             control={control}
-            render={({ field: { ref, onChange, onBlur, ...field } }) => (
-              <FormControl fullWidth className="tw-my-4">
-                <FormLabel>Phone number</FormLabel>
-                <OutlinedInput
-                  {...field}
-                  ref={ref}
-                  size="small"
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  error={!!errors.phone}
-                  fullWidth
-                  type="phone"
-                  placeholder="Phone number (including country code)"
-                />
-              </FormControl>
+            render={({ field: { ref, onChange, ...field } }) => (
+              <InputPhone
+                {...field}
+                fullWidth
+                className="tw-my-4"
+                onChange={onChange}
+                defaultCountry="IN"
+                error={!!errors.phone}
+                label="Phone number"
+                helperText={errors.phone ? errors.phone.message : ' '}
+              />
             )}
           />
 
@@ -158,7 +162,7 @@ export const NewContact = ({ open, onCloseClicked, contactSaved }: Props) => {
         <Divider />
         <DialogActions>
           <LoadingButton
-            disabled={!isValid || !isDirty}
+            disabled={disableForm()}
             variant="contained"
             disableElevation
             type="submit"

@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { InputPhone } from '../../components/PhoneInput/PhoneInput';
 import { makeRequest, RequestMethod } from '../../shared';
 
 const FormSchema = yup
@@ -140,21 +141,16 @@ export const Register = () => {
             <Controller
               name="phone"
               control={control}
-              render={({ field: { ref, onChange, onBlur, ...field } }) => (
-                <TextField
+              render={({ field: { ref, onChange, ...field } }) => (
+                <InputPhone
                   {...field}
-                  ref={ref}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  error={!!errors.phone}
                   fullWidth
-                  label="Phone number (with country code)"
-                  variant="outlined"
-                  type="tel"
-                  InputLabelProps={{
-                    className: 'tw-text-slate-100',
-                  }}
-                  className="tw-mb-4"
+                  className="tw-mt-4"
+                  onChange={onChange}
+                  defaultCountry="IN"
+                  error={!!errors.phone}
+                  label="Phone number"
+                  helperText={errors.phone ? errors.phone.message : ' '}
                 />
               )}
             />
