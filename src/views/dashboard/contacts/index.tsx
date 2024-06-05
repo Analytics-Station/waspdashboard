@@ -1,6 +1,17 @@
-import { faAddressBook, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAddressBook,
+  faPeopleGroup,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Container, Divider, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Box,
+  Container,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { MenuLink } from '../../../shared';
@@ -11,6 +22,7 @@ export const Contacts = () => {
     {
       label: 'Contacts',
       url: '/contacts/list',
+      urlCheck: ['/contacts/list', '/contacts/new', '/contacts/bulk-import'],
       icon: faAddressBook,
     },
     {
@@ -20,20 +32,32 @@ export const Contacts = () => {
     },
   ];
 
-  const isItemActive = (url: string | undefined): boolean => {
-    return url ? location.pathname.startsWith(url) : false;
+  const isItemActive = (index: number): boolean => {
+    const link = links[index];
+    if (link.urlCheck) {
+      let exists = false;
+      link.urlCheck.every((url) => {
+        if (location.pathname.startsWith(url)) {
+          exists = true;
+          return false;
+        }
+        return true;
+      });
+      return exists;
+    }
+    return location.pathname.startsWith(link.url);
   };
 
   return (
     <Container maxWidth="xxl" className="tw-flex tw-h-full" disableGutters>
       <Box className="tw-w-56">
         <List className="tw-py-0">
-          {links.map((link) => (
+          {links.map((link, index) => (
             <ListItemButton
               key={link.label}
               component={Link}
               to={link.url}
-              selected={isItemActive(link.url)}
+              selected={isItemActive(index)}
             >
               <ListItemIcon>
                 <FontAwesomeIcon fixedWidth icon={link.icon} />
@@ -53,3 +77,4 @@ export const Contacts = () => {
 
 export * from './contactList';
 export * from './bulkImportContacts';
+export * from './newContact';

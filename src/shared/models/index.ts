@@ -20,5 +20,6 @@ export interface FileInfo {
 export interface MenuLink {
   label: string;
   url: string;
+  urlCheck?: string[];
   icon: IconDefinition;
 }

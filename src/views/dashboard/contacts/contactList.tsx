@@ -19,6 +19,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { parsePhoneNumber } from 'react-phone-number-input';
 import { Link } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
@@ -31,7 +32,6 @@ import {
   PaginationMeta,
   RequestMethod,
 } from '../../../shared';
-import { NewContact } from './newContact';
 
 const FormSchema = yup
   .object({
@@ -144,15 +144,17 @@ export const ContactList = () => {
                 Import XLSX
               </Button>
             </Link>
-            <Button
-              variant="contained"
-              disableElevation
-              onClick={() => setShowNewContact(true)}
-              size="small"
-              startIcon={<FontAwesomeIcon icon={faAddressBook} fixedWidth />}
-            >
-              New Contact
-            </Button>
+            <Link to="/contacts/new">
+              <Button
+                variant="contained"
+                disableElevation
+                onClick={() => setShowNewContact(true)}
+                size="small"
+                startIcon={<FontAwesomeIcon icon={faAddressBook} fixedWidth />}
+              >
+                New Contact
+              </Button>
+            </Link>
           </Grid>
         </Grid>
       </Box>
@@ -181,7 +183,8 @@ export const ContactList = () => {
           {
             field: 'Phone',
             valueFormatter: (val, row, col) => {
-              return row.phone;
+              const phone = parsePhoneNumber(row.phone);
+              return `${phone ? phone.formatInternational() : row.phone}`;
             },
             flex: 1,
           },
@@ -237,7 +240,7 @@ export const ContactList = () => {
         pageSizeOptions={[10, 20, 50, 100]}
       />
 
-      <NewContact
+      {/* <NewContact
         open={showNewContact}
         onCloseClicked={() => {
           setShowNewContact(false);
@@ -246,7 +249,7 @@ export const ContactList = () => {
         contactSaved={() => {
           fetchContacts();
         }}
-      />
+      /> */}
 
       <DeleteDialog
         title="Delete contact"

@@ -20,6 +20,7 @@
     "@mui/lab": "^5.0.0-alpha.169",
     "@mui/material": "^5.15.15",
     "@mui/x-data-grid": "^7.1.1",
+    "@mui/x-date-pickers": "^7.6.1",
     "@reduxjs/toolkit": "^2.2.5",
     "@tiptap/core": "^2.3.0",
     "@tiptap/extension-heading": "^2.3.0",

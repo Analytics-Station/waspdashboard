@@ -23,6 +23,7 @@ import {
   FacebookBarrier,
   NewBroadcast,
   NewBroadcastTemplate,
+  NewContact,
   NewTemplateVariable,
   Register,
   SignIn,
@@ -91,6 +92,10 @@ export const AppRoutes = () => {
             </RequireOrganisationRole>
           ),
           children: [
+            {
+              path: 'new',
+              element: <NewContact />,
+            },
             {
               path: 'bulk-import',
               element: <BulkImportContacts />,
