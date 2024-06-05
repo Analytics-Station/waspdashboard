@@ -28,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { InputPhone } from '../../../components/PhoneInput/PhoneInput';
+import { makeRequest, RequestMethod } from '../../../shared';
 
 const FormSchema = yup
   .object({
@@ -74,18 +75,17 @@ export const NewContact = () => {
         },
       ],
     };
-    console.log(payload);
-    // try {
-    //   const response = await makeRequest(
-    //     '/contacts',
-    //     RequestMethod.POST,
-    //     true,
-    //     payload
-    //   );
-    //   navigate('/contacts/list');
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      const response = await makeRequest(
+        '/contacts',
+        RequestMethod.POST,
+        true,
+        payload
+      );
+      navigate('/contacts/list');
+    } catch (e) {
+      console.log(e);
+    }
     setLoading(false);
   };
 
@@ -229,7 +229,7 @@ export const NewContact = () => {
                       {...field}
                     />
                   }
-                  label="Can broadcast?"
+                  label="Allow broadcast?"
                 />
               )}
             />
@@ -305,6 +305,13 @@ export const NewContact = () => {
                             fullWidth: true,
                           },
                         }}
+                        onChange={(value) =>
+                          attributeValueChanged(
+                            index,
+                            value ? value.format('DD-MM-YYYY') : '',
+                            false
+                          )
+                        }
                       />
                     )}
                   </Grid>
