@@ -118,7 +118,7 @@ export const MainAppBar = () => {
 
   return (
     <Box className="tw-bg-slate-100">
-      <Container maxWidth="xxl">
+      <Container maxWidth="xxl" disableGutters>
         <AppBar
           elevation={0}
           color="inherit"
@@ -130,12 +130,11 @@ export const MainAppBar = () => {
         >
           <Toolbar>
             <Link to="/">
-              <Typography
-                variant="h6"
-                className="tw-font-black tw-text-yellow-500 tw-mr-4"
-              >
-                WASP
-              </Typography>
+              <img
+                src="./images/wassp.svg"
+                alt="Wassp"
+                className="tw-w-24 tw-mr-4"
+              />
             </Link>
             {getRoleMenus().length > 0 && (
               <Divider
