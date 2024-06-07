@@ -45,8 +45,8 @@ export const Auth = () => {
             <Grid container justifyContent="center">
               <Grid item lg={6}>
                 <img
-                  src="./images/logo.webp"
-                  alt="Wasp"
+                  src="./images/wassp.svg"
+                  alt="Wassp"
                   className="tw-w-full"
                 />
               </Grid>
