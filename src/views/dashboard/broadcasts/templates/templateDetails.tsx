@@ -106,17 +106,21 @@ export const BroadcastTemplateDetails = () => {
           </Grid>
           <Grid item sm={9}>
             <Box className="tw-border tw-border-solid tw-border-slate-300 tw-rounded-lg tw-p-4">
-              <Typography
-                variant="subtitle2"
-                className="tw-font-medium tw-text-slate-600 tw-mb-2"
-              >
-                Header
-              </Typography>
-              <Box className="tw-bg-slate-100 tw-p-2 tw-rounded-lg tw-mb-8">
-                <Typography variant="body1">
-                  {currentTemplate.getComponentHeader()}
-                </Typography>
-              </Box>
+              {currentTemplate.getComponentHeader() && (
+                <>
+                  <Typography
+                    variant="subtitle2"
+                    className="tw-font-medium tw-text-slate-600 tw-mb-2"
+                  >
+                    Header
+                  </Typography>
+                  <Box className="tw-bg-slate-100 tw-p-2 tw-rounded-lg tw-mb-8">
+                    <Typography variant="body1">
+                      {currentTemplate.getComponentHeader()}
+                    </Typography>
+                  </Box>
+                </>
+              )}
 
               <Typography
                 variant="subtitle2"
@@ -131,17 +135,21 @@ export const BroadcastTemplateDetails = () => {
                 />
               </Box>
 
-              <Typography
-                variant="subtitle2"
-                className="tw-font-medium tw-text-slate-600 tw-mb-2"
-              >
-                Footer
-              </Typography>
-              <Box className="tw-bg-slate-100 tw-p-2 tw-rounded-lg">
-                <Typography variant="body1">
-                  {currentTemplate.getComponentFooter()}
-                </Typography>
-              </Box>
+              {currentTemplate.getComponentFooter() && (
+                <>
+                  <Typography
+                    variant="subtitle2"
+                    className="tw-font-medium tw-text-slate-600 tw-mb-2"
+                  >
+                    Footer
+                  </Typography>
+                  <Box className="tw-bg-slate-100 tw-p-2 tw-rounded-lg">
+                    <Typography variant="body1">
+                      {currentTemplate.getComponentFooter()}
+                    </Typography>
+                  </Box>
+                </>
+              )}
             </Box>
           </Grid>
         </Grid>

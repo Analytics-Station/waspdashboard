@@ -50,7 +50,7 @@ export class BroadcastTemplate {
       return header['example']['header_handle'][0];
     }
 
-    return '<div></div>';
+    return null;
   }
 
   getComponentBody() {
@@ -60,7 +60,7 @@ export class BroadcastTemplate {
 
   getComponentFooter() {
     const footer = this.components.find((item) => item.type === 'FOOTER');
-    return footer['text'];
+    return footer ? footer['text'] : null;
   }
 }
 
