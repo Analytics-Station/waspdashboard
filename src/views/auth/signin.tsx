@@ -43,7 +43,7 @@ export const SignIn = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <Container maxWidth="xs">
         <Typography variant="h2" className="tw-font-black tw-text-yellow-400">
           Sign In
@@ -63,6 +63,7 @@ export const SignIn = () => {
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!errors.email}
+                  autoComplete="off"
                   fullWidth
                   label="Email address"
                   variant="outlined"
@@ -86,6 +87,7 @@ export const SignIn = () => {
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!errors.email}
+                  autoComplete="off"
                   fullWidth
                   label="Password"
                   variant="outlined"
