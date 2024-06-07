@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { logout, RootState, useAppDispatch } from '../../redux';
 
@@ -31,7 +31,6 @@ interface MenuItemProp {
 
 export const MainAppBar = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const loggedUser = useSelector((state: RootState) => state.auth.user);
 
   const pages: MenuItemProp[] = [
@@ -191,7 +190,9 @@ export const MainAppBar = () => {
               </Box>
               <Divider />
               <MenuItem onClick={handleClose}>
-                <Typography variant="subtitle2">My profile</Typography>
+                <Link to="/profile">
+                  <Typography variant="subtitle2">My profile</Typography>
+                </Link>
               </MenuItem>
               {loggedUser.isOrganisationRole() &&
                 loggedUser.organisation &&

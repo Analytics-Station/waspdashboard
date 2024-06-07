@@ -1,9 +1,9 @@
-import { Box, CircularProgress, Container, Divider, Grid, Typography } from '@mui/material';
+import { Box, Container, Divider, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { TipTapEditor } from '../../../../components';
+import { PleaseWait, TipTapEditor } from '../../../../components';
 import { fetchTemplateDetails, RootState, useAppDispatch } from '../../../../redux';
 import { BroadcastTemplate } from '../../../../shared';
 
@@ -22,17 +22,6 @@ export const BroadcastTemplateDetails = () => {
     if (params['templateId']) {
       dispatch(fetchTemplateDetails(params['templateId']));
     }
-  };
-
-  const renderLoading = () => {
-    return (
-      <Box className="tw-text-center tw-my-12">
-        <Typography variant="h6" className="tw-font-medium tw-mb-4">
-          Please wait...
-        </Typography>
-        <CircularProgress size={16} />
-      </Box>
-    );
   };
 
   const renderContent = (currentTemplate: BroadcastTemplate) => {
@@ -162,7 +151,7 @@ export const BroadcastTemplateDetails = () => {
 
   return (
     <Container maxWidth="xl" className="tw-h-full tw-py-4">
-      {currentTemplate ? renderContent(currentTemplate) : renderLoading()}
+      {currentTemplate ? renderContent(currentTemplate) : <PleaseWait />}
     </Container>
   );
 };

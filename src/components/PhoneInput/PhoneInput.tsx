@@ -8,7 +8,7 @@ import PhoneInput from 'react-phone-number-input/input';
 import { countries } from '../../shared/resources';
 
 const MaterialInput = forwardRef(
-  ({ countryChanged, flagCountry, ...rest }: any, ref) => {
+  ({ countryChanged, flagCountry, disabled, ...rest }: any, ref) => {
     return (
       <TextField
         {...rest}

@@ -4,3 +4,4 @@ export * from './broadcasts';
 export * from './contactGroups';
 export * from './users';
 export * from './organisations';
+export * from './profile';
