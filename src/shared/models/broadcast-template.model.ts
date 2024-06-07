@@ -44,10 +44,12 @@ export class BroadcastTemplate {
   getComponentHeader() {
     const header = this.components.find((item) => item.type === 'HEADER');
 
-    if (header['format'] === 'TEXT') {
-      return header['text'];
-    } else if (header['format'] === 'IMAGE') {
-      return header['example']['header_handle'][0];
+    if (header) {
+      if (header['format'] === 'TEXT') {
+        return header['text'];
+      } else if (header['format'] === 'IMAGE') {
+        return header['example']['header_handle'][0];
+      }
     }
 
     return null;
