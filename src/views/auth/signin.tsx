@@ -2,14 +2,7 @@ import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import {
-  Alert,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -56,7 +49,7 @@ export const SignIn = () => {
           Sign In
         </Typography>
         <Typography variant="h6" className="tw-text-white tw-mb-12">
-          Login to stay connected
+          Login to stay connected!
         </Typography>
         <Grid container>
           <Grid item sm={12}>
