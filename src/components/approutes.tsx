@@ -12,6 +12,7 @@ import {
   Broadcast,
   BroadcastHistory,
   BroadcastScheduled,
+  BroadcastTemplateDetails,
   BroadcastTemplateList,
   BroadcastTemplates,
   BroadcastTemplateVariables,
@@ -179,6 +180,10 @@ export const AppRoutes = () => {
               element: <Navigate to="history" />,
             },
           ],
+        },
+        {
+          path: 'broadcasts/templates/:templateId',
+          element: <BroadcastTemplateDetails />,
         },
         {
           path: 'users',

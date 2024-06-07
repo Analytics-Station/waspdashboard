@@ -11,6 +11,7 @@ export * from './contact-group.model';
 export * from './template-variable.model';
 export * from './broadcast-template.model';
 export * from './organisation.model';
+export * from './language.model';
 
 export interface FileInfo {
   fileName: string;

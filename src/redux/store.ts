@@ -1,11 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
-import { appReducer, authReducer } from './slices';
+import { appReducer, authReducer, templateReducer } from './slices';
 
 const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
+  template: templateReducer,
 });
 
 export const store = configureStore({

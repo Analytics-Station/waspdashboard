@@ -1,4 +1,11 @@
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -100,7 +107,7 @@ export const BulkImportContacts = () => {
 
   if (!uploadMode) {
     return (
-      <>
+      <Container maxWidth="xl" className="tw-pt-12">
         <Box className="tw-mt-12">
           <Divider />
           <Box className="tw-flex tw-items-center tw-mt-4 tw-p-4 tw-rounded-md tw-bg-yellow-100 tw-border tw-border-solid tw-border-yellow-500">
@@ -184,37 +191,39 @@ export const BulkImportContacts = () => {
           onSuccessClicked={() => discardData()}
           onCancelClicked={() => showDiscardDialog(false)}
         />
-      </>
+      </Container>
     );
   }
 
   return (
-    <Grid
-      {...getRootProps()}
-      container
-      justifyContent="center"
-      className={`tw-mt-12 tw-px-4 tw-py-12 tw-border-2 tw-border-dashed tw-border-yellow-500 tw-rounded-md ${
-        isDragActive && 'tw-bg-slate-100'
-      }`}
-    >
-      <input {...getInputProps()} />
-      <Grid item sm={6} className="tw-text-center">
-        <Typography variant="h6" className="tw-font-bold">
-          Bulk upload contacts
-        </Typography>
-        <Typography variant="subtitle1" className="tw-text-slate-600">
-          Drag or click here to upload XLSX file to import multiple contacts.
-          <br />
-          Download the sample template&nbsp;
-          <MLink
-            href={import.meta.env.VITE_CONTACTS_BULK_TEMPLATE}
-            onClick={(e) => e.stopPropagation()}
-          >
-            here
-          </MLink>
-          .
-        </Typography>
+    <Container maxWidth="xl" className="tw-pt-12">
+      <Grid
+        {...getRootProps()}
+        container
+        justifyContent="center"
+        className={`tw-mt-12 tw-px-4 tw-py-12 tw-border-2 tw-border-dashed tw-border-yellow-500 tw-rounded-md ${
+          isDragActive && 'tw-bg-slate-100'
+        }`}
+      >
+        <input {...getInputProps()} />
+        <Grid item sm={6} className="tw-text-center">
+          <Typography variant="h6" className="tw-font-bold">
+            Bulk upload contacts
+          </Typography>
+          <Typography variant="subtitle1" className="tw-text-slate-600">
+            Drag or click here to upload XLSX file to import multiple contacts.
+            <br />
+            Download the sample template&nbsp;
+            <MLink
+              href={import.meta.env.VITE_CONTACTS_BULK_TEMPLATE}
+              onClick={(e) => e.stopPropagation()}
+            >
+              here
+            </MLink>
+            .
+          </Typography>
+        </Grid>
       </Grid>
-    </Grid>
+    </Container>
   );
 };

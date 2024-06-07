@@ -4,6 +4,7 @@ import { Chip, Container, IconButton, Tooltip } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { DeleteDialog } from '../../../../components';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../../../shared';
 
 export const BroadcastTemplateList = () => {
+  const navigate = useNavigate();
   const [pagination, setPagination] = useState<PaginationMeta>(
     new PaginationMeta({})
   );
@@ -67,6 +69,7 @@ export const BroadcastTemplateList = () => {
         }}
         autoHeight
         disableRowSelectionOnClick
+        onRowClick={(params) => navigate(`/broadcasts/templates/${params.id}`)}
         columns={[
           {
             field: 'ID',
