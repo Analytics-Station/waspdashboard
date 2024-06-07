@@ -117,6 +117,10 @@ export const MuiCustomTheme = createTheme({
             minWidth: 140,
             padding: '8px 0 12px',
           },
+          '& .MuiTypography-root.title': {
+            margin: '4px 12px 12px 12px',
+            fontWeight: 'bold',
+          },
           '& .MuiMenuItem-root': {
             margin: '4px 12px 0 12px',
             padding: '8px 10px',

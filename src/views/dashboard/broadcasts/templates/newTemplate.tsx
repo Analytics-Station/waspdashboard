@@ -11,10 +11,8 @@ export const NewBroadcastTemplate = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<any>({});
-  const [loading, setLoading] = useState(false);
 
   const createTemplateRequest = async (payload: any) => {
-    setLoading(true);
     try {
       const response = await makeRequest(
         '/broadcast-templates',
@@ -26,7 +24,6 @@ export const NewBroadcastTemplate = () => {
     } catch (e) {
       console.log(e);
     }
-    setLoading(false);
   };
 
   return (
