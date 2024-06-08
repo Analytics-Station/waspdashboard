@@ -134,7 +134,7 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
                 onChange={onChange}
                 onBlur={onBlur}
               >
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="AUTHENTICATION"
                   control={<Radio size="small" />}
                   label={
@@ -142,7 +142,7 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
                       AUTHENTICATION
                     </Typography>
                   }
-                />
+                /> */}
                 <FormControlLabel
                   value="MARKETING"
                   control={<Radio size="small" />}
