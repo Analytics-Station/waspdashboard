@@ -188,11 +188,11 @@ export const MainAppBar = () => {
                 </Typography>
               </Box>
               <Divider />
-              <MenuItem onClick={handleClose}>
-                <Link to="/profile">
+              <Link to="/profile">
+                <MenuItem onClick={handleClose}>
                   <Typography variant="subtitle2">My profile</Typography>
-                </Link>
-              </MenuItem>
+                </MenuItem>
+              </Link>
               {loggedUser.isOrganisationRole() &&
                 loggedUser.organisation &&
                 loggedUser.organisation.verified && (
@@ -204,7 +204,7 @@ export const MainAppBar = () => {
                     </Link>
                   </MenuItem>
                 )}
-              <Divider />
+              <Divider className="tw-mt-2" />
               <MenuItem onClick={logoutClicked}>
                 <Typography variant="subtitle2">Logout</Typography>
               </MenuItem>

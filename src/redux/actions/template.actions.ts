@@ -20,3 +20,22 @@ export const fetchTemplateDetails = createAsyncThunk(
     }
   }
 );
+
+export const checkTemplateName = createAsyncThunk(
+  'checkTemplateName',
+  async (templateName: string, { rejectWithValue }) => {
+    try {
+      const response = await makeRequest<
+        null,
+        BroadcastTemplateDetailsResponse
+      >(
+        `/broadcast-templates/search?name=${templateName}`,
+        RequestMethod.GET,
+        true
+      );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

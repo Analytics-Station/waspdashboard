@@ -5,14 +5,18 @@ import {
   BroadcastTemplate,
   BroadcastTemplateDetailsResponse,
 } from '../../shared/models';
-import { fetchTemplateDetails } from '../actions';
+import { checkTemplateName, fetchTemplateDetails } from '../actions';
 
 interface InitialState {
+  loading: boolean;
+  nameValid: boolean | null;
   currentTemplate: BroadcastTemplate | null;
 }
 
 const initialState: InitialState = {
   currentTemplate: null,
+  loading: false,
+  nameValid: null,
 };
 
 export const templateSlice = createSlice({
@@ -36,6 +40,20 @@ export const templateSlice = createSlice({
       )
       .addCase(fetchTemplateDetails.pending, (state) => {
         state.currentTemplate = null;
+      });
+
+    builder
+      .addCase(checkTemplateName.pending, (state) => {
+        state.nameValid = null;
+        state.loading = true;
+      })
+      .addCase(checkTemplateName.fulfilled, (state) => {
+        state.nameValid = true;
+        state.loading = false;
+      })
+      .addCase(checkTemplateName.rejected, (state) => {
+        state.nameValid = false;
+        state.loading = false;
       });
   },
 });

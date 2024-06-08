@@ -1,3 +1,9 @@
+import {
+  faCircleCheck,
+  faCircleXmark,
+  faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
@@ -12,9 +18,17 @@ import {
   Select,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
+import {
+  checkTemplateName,
+  RootState,
+  useAppDispatch,
+} from '../../../../../redux';
 import { languages } from '../../../../../shared';
 
 const FormSchema = yup
@@ -31,11 +45,16 @@ interface Props {
 }
 
 export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
+  const dispatch = useAppDispatch();
+  const loading = useSelector((state: RootState) => state.template.loading);
+  const nameValid = useSelector((state: RootState) => state.template.nameValid);
+
   const {
     handleSubmit,
     control,
     setValue,
     getValues,
+    watch,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: 'all',
@@ -46,6 +65,19 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
     },
     resolver: yupResolver(FormSchema),
   });
+  const watchName = watch('name');
+  const [searchQuery] = useDebounce(watchName, 300);
+
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) {
+      console.log(searchQuery);
+      validateTemplateName(searchQuery);
+    }
+  }, [searchQuery]);
+
+  const validateTemplateName = (query: string) => {
+    dispatch(checkTemplateName(query));
+  };
 
   const onSubmit = async (data: any) => {
     nextClicked(data);
@@ -58,7 +90,28 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
     if (!formData['category'] && !isDirty) {
       return true;
     }
+    if (loading || !nameValid) {
+      return true;
+    }
     return false;
+  };
+
+  const renderTemplateNameChecker = () => {
+    if (watchName.length === 0) {
+      return null;
+    }
+    if (loading) {
+      return <FontAwesomeIcon icon={faSpinner} color="#27ae60" />;
+    }
+    if (nameValid === null) {
+      return null;
+    }
+    return (
+      <FontAwesomeIcon
+        icon={nameValid ? faCircleCheck : faCircleXmark}
+        color={nameValid ? '#27ae60' : '#e74c3c'}
+      />
+    );
   };
 
   return (
@@ -134,6 +187,7 @@ export const TemplateForm1 = ({ nextClicked, formData }: Props) => {
                 error={!!errors.name}
                 fullWidth
                 placeholder="Template identifier"
+                endAdornment={renderTemplateNameChecker()}
               />
             </FormControl>
           )}
