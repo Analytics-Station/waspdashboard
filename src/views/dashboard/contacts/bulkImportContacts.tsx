@@ -30,10 +30,6 @@ export const BulkImportContacts = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
 
-  useEffect(() => {
-    console.log(selectedContacts);
-  }, [selectedContacts]);
-
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       onFileSelect(acceptedFiles[0]);

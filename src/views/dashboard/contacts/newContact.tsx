@@ -168,7 +168,7 @@ export const NewContact = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
-      <Container maxWidth="md">
+      <Container maxWidth="sm">
         <Box className="tw-mt-12">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant="h6" className="tw-font-bold tw-mb-4">

@@ -174,7 +174,6 @@ export const NewBroadcast = () => {
 
   const disableForm = (): boolean => {
     if (!isValid || !isDirty) {
-      console.log('ehh');
       return true;
     }
 

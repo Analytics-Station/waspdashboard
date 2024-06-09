@@ -14,6 +14,7 @@ const MaterialInput = forwardRef(
         {...rest}
         inputRef={ref}
         InputProps={{
+          size: 'small',
           startAdornment: (
             <FormControl>
               <Select
