@@ -230,5 +230,10 @@ export const MuiCustomTheme = createTheme({
         },
       },
     },
+    MuiDrawer: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
   },
 });

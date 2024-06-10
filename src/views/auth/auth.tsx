@@ -37,13 +37,13 @@ export const Auth = () => {
       disableGutters
     >
       <Grid container className="tw-h-full tw-fixed tw-bg-blue-600 tw-z-0">
-        <Grid item sm={6} className="tw-bg-white"></Grid>
+        <Grid item md={6} className="tw-bg-white"></Grid>
       </Grid>
       <Container maxWidth="xxl" className="tw-h-full tw-relative tw-z-10">
-        <Grid container className="tw-h-full tw-items-center">
-          <Grid item xs={10} sm={6} className="tw-bg-white tw-text-center">
+        <Grid container className="tw-h-full tw-items-center tw-justify-center">
+          <Grid item sm={8} md={6} className="tw-text-center">
             <Grid container justifyContent="center">
-              <Grid item lg={6}>
+              <Grid item xs={12} md={6}>
                 <img
                   src="./images/wassp.svg"
                   alt="Wassp"
@@ -52,7 +52,7 @@ export const Auth = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item sm={6} className="tw-text-center">
+          <Grid item xs={12} sm={10} md={6} className="tw-text-center">
             <Outlet />
           </Grid>
         </Grid>

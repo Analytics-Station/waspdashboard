@@ -1,17 +1,6 @@
-import {
-  faAddressBook,
-  faPeopleGroup,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Box,
-  Container,
-  Divider,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import { Box, Container, Divider, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { MenuLink } from '../../../shared';
@@ -20,7 +9,7 @@ export const Contacts = () => {
   const location = useLocation();
   const links: MenuLink[] = [
     {
-      label: 'Contacts',
+      label: 'Contact list',
       url: '/contacts/list',
       urlCheck: ['/contacts/list', '/contacts/new', '/contacts/bulk-import'],
       icon: faAddressBook,
@@ -50,7 +39,7 @@ export const Contacts = () => {
 
   return (
     <Container maxWidth="xxl" className="tw-flex tw-h-full" disableGutters>
-      <Box className="tw-w-56">
+      <Box className="tw-hidden md:tw-block tw-w-56">
         <List className="tw-py-0">
           {links.map((link, index) => (
             <ListItemButton
@@ -67,7 +56,7 @@ export const Contacts = () => {
           ))}
         </List>
       </Box>
-      <Divider orientation="vertical" />
+      <Divider className="tw-hidden md:tw-block" orientation="vertical" />
       <Box className="tw-flex-1 tw-overflow-y-auto">
         <Outlet />
       </Box>

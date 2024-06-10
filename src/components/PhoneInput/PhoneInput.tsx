@@ -8,13 +8,13 @@ import PhoneInput from 'react-phone-number-input/input';
 import { countries } from '../../shared/resources';
 
 const MaterialInput = forwardRef(
-  ({ countryChanged, flagCountry, disabled, ...rest }: any, ref) => {
+  ({ countryChanged, flagCountry, disabled, size, ...rest }: any, ref) => {
     return (
       <TextField
         {...rest}
         inputRef={ref}
         InputProps={{
-          size: 'small',
+          size,
           startAdornment: (
             <FormControl>
               <Select
@@ -53,6 +53,7 @@ export const InputPhone = (props: any) => {
     onChange,
     label,
     onCountryChanged,
+    size,
     ...rest
   } = props;
 
@@ -82,6 +83,7 @@ export const InputPhone = (props: any) => {
       flagCountry={country}
       autoComplete="tel"
       value={selectedVal}
+      size={size}
       onChange={handleChange}
       inputComponent={MaterialInput}
       countryChanged={(e: ChangeEvent<HTMLInputElement>) => {

@@ -60,8 +60,11 @@ export const UserList = () => {
   return (
     <>
       <Box className="tw-bg-slate-100 tw-p-6 tw-mt-8 tw-mb-4 tw-rounded-lg">
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item sm={3}>
+        <Grid
+          container
+          className="tw-flex-col-reverse md:tw-flex-row md:tw-justify-between md:tw-items-center"
+        >
+          <Grid item xs={12} md={3}>
             <Controller
               name="query"
               control={control}
@@ -81,13 +84,14 @@ export const UserList = () => {
               )}
             />
           </Grid>
-          <Grid item sm={9} className="tw-text-right">
+          <Grid item xs={12} sm={9} className="tw-text-right">
             <Button
               variant="contained"
               disableElevation
               onClick={() => setShowNewUser(true)}
               size="small"
               startIcon={<FontAwesomeIcon icon={faUserPlus} fixedWidth />}
+              className="tw-mb-4 md:tw-mb-0"
             >
               New User
             </Button>

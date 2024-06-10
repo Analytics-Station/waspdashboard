@@ -98,7 +98,7 @@ export const Register = () => {
           Sign up with us
         </Typography>
         <Grid container>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="name"
               control={control}
@@ -120,7 +120,7 @@ export const Register = () => {
               )}
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="email"
               control={control}
@@ -143,7 +143,7 @@ export const Register = () => {
               )}
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="phone"
               control={control}
@@ -151,7 +151,6 @@ export const Register = () => {
                 <InputPhone
                   {...field}
                   fullWidth
-                  className="tw-mt-4"
                   onChange={onChange}
                   defaultCountry="IN"
                   error={!!errors.phone}
@@ -163,7 +162,7 @@ export const Register = () => {
             />
           </Grid>
 
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="password"
               control={control}
@@ -186,7 +185,7 @@ export const Register = () => {
               )}
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="cpassword"
               control={control}
@@ -204,18 +203,18 @@ export const Register = () => {
                   InputLabelProps={{
                     className: 'tw-text-slate-100',
                   }}
-                  className="tw-mb-4"
+                  className="tw-mb-8"
                 />
               )}
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <LoadingButton
               disabled={disableForm()}
               color="success"
               size="large"
               variant="contained"
-              className="tw-w-3/4 tw-font-bold tw-mb-12"
+              className="tw-w-3/4 tw-font-bold xs:tw-mb-4 md:tw-mb-8"
               disableElevation
               type="submit"
               loading={loading}
@@ -223,7 +222,7 @@ export const Register = () => {
               Continue
             </LoadingButton>
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Link to="/auth/signin">
               <Button>Login instead</Button>
             </Link>

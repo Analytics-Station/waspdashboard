@@ -4,13 +4,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  Broadcast,
-  BroadcastResponse,
-  makeRequest,
-  PaginationMeta,
-  RequestMethod,
-} from '../../../shared';
+import { Broadcast, BroadcastResponse, makeRequest, PaginationMeta, RequestMethod } from '../../../shared';
 
 export const BroadcastHistory = () => {
   const [pagination, setPagination] = useState<PaginationMeta>(
@@ -55,6 +49,7 @@ export const BroadcastHistory = () => {
             valueFormatter: (val, row, col) => {
               return row.name;
             },
+            minWidth: 200,
             flex: 1,
           },
           {
@@ -63,6 +58,7 @@ export const BroadcastHistory = () => {
               return row.recipients;
             },
             flex: 1,
+            minWidth: 150,
           },
           {
             field: 'Sent at',
@@ -70,6 +66,7 @@ export const BroadcastHistory = () => {
               return moment(row.createdAt).format('DD, MMM YYYY hh:mm A');
             },
             flex: 1,
+            minWidth: 200,
           },
           {
             field: 'Accepted',
@@ -77,6 +74,7 @@ export const BroadcastHistory = () => {
               return row.accepted;
             },
             flex: 1,
+            minWidth: 150,
           },
           {
             field: 'Delivered',
@@ -84,6 +82,7 @@ export const BroadcastHistory = () => {
               return row.delivered;
             },
             flex: 1,
+            minWidth: 150,
           },
           {
             field: 'Read',
@@ -91,6 +90,7 @@ export const BroadcastHistory = () => {
               return row.read;
             },
             flex: 1,
+            minWidth: 100,
           },
           {
             field: 'Failed',
@@ -98,6 +98,7 @@ export const BroadcastHistory = () => {
               return row.failed;
             },
             flex: 1,
+            minWidth: 120,
           },
         ]}
         rows={broadcasts}

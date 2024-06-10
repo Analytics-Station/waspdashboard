@@ -79,7 +79,7 @@ export const Profile = () => {
       <Divider className="tw-my-8" />
 
       <Grid container spacing={4}>
-        <Grid item sm={2} className="tw-text-center">
+        <Grid item xs={12} md={2} className="tw-text-center">
           <Typography
             variant="subtitle2"
             className="tw-text-slate-400 tw-mb-4 tw-text-left"
@@ -94,13 +94,15 @@ export const Profile = () => {
 
           <Button
             variant="text"
+            size="small"
+            className="tw-mt-2"
             color="info"
             startIcon={<FontAwesomeIcon icon={faImage} color="#3498db" />}
           >
             Change profile image
           </Button>
         </Grid>
-        <Grid item sm={4}>
+        <Grid item xs={12} md={4}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Typography
               variant="subtitle2"
@@ -204,7 +206,7 @@ export const Profile = () => {
             )}
           /> */}
 
-            <FlexBox>
+            <FlexBox className="tw-mb-8">
               <Button
                 className="tw-ml-auto"
                 variant="contained"

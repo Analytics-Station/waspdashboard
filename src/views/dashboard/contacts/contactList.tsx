@@ -1,20 +1,7 @@
-import {
-  faAddressBook,
-  faFileExcel,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faFileExcel, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  IconButton,
-  OutlinedInput,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, IconButton, OutlinedInput, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -25,13 +12,7 @@ import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
 import { DeleteDialog } from '../../../components';
-import {
-  Contact,
-  ContactResponse,
-  makeRequest,
-  PaginationMeta,
-  RequestMethod,
-} from '../../../shared';
+import { Contact, ContactResponse, makeRequest, PaginationMeta, RequestMethod } from '../../../shared';
 
 const FormSchema = yup
   .object({
@@ -104,8 +85,11 @@ export const ContactList = () => {
         can even manually export or import contacts.
       </Typography>
       <Box className="tw-bg-slate-100 tw-p-6 tw-mt-8 tw-mb-4 tw-rounded-lg">
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item sm={3}>
+        <Grid
+          container
+          className="tw-flex-col-reverse md:tw-flex-row md:tw-justify-between md:tw-items-center"
+        >
+          <Grid item xs={12} md={3}>
             <Controller
               name="query"
               control={control}
@@ -125,13 +109,13 @@ export const ContactList = () => {
               )}
             />
           </Grid>
-          <Grid item sm={9} className="tw-text-right">
+          <Grid item xs={12} md={9} className="tw-text-right">
             <Link to="/contacts/bulk-import">
               <Button
                 variant="contained"
                 disableElevation
                 color="success"
-                className="tw-mx-2"
+                className="tw-mx-2 tw-mb-4"
                 size="small"
                 startIcon={
                   <FontAwesomeIcon
@@ -148,6 +132,7 @@ export const ContactList = () => {
               <Button
                 variant="contained"
                 disableElevation
+                className="tw-mb-4"
                 onClick={() => setShowNewContact(true)}
                 size="small"
                 startIcon={<FontAwesomeIcon icon={faAddressBook} fixedWidth />}

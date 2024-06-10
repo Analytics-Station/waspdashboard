@@ -1,8 +1,8 @@
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Alert, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Alert, Button, Container, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -23,11 +23,11 @@ export const SignIn = () => {
   const loading = useSelector((state: RootState) => state.app.loading);
 
   const [alertMessage, setAlertMessage] = useState('');
+  const [securePassword, setSecurePassword] = useState(true);
 
   const {
     handleSubmit,
     control,
-    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: 'all',
@@ -52,7 +52,7 @@ export const SignIn = () => {
           Login to stay connected!
         </Typography>
         <Grid container>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="email"
               control={control}
@@ -71,17 +71,20 @@ export const SignIn = () => {
                   InputLabelProps={{
                     className: 'tw-text-slate-100',
                   }}
+                  InputProps={{
+                    className: 'tw-text-white',
+                  }}
                 />
               )}
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <Controller
               name="password"
               control={control}
               render={({ field: { ref, onChange, onBlur, ...field } }) => (
                 <TextField
-                  className="tw-mt-8"
+                  className="xs:tw-mt-6 md:tw-mt-8"
                   {...field}
                   ref={ref}
                   onChange={onChange}
@@ -91,9 +94,23 @@ export const SignIn = () => {
                   fullWidth
                   label="Password"
                   variant="outlined"
-                  type="password"
+                  type={securePassword ? 'password' : 'text'}
                   InputLabelProps={{
                     className: 'tw-text-slate-100',
+                  }}
+                  InputProps={{
+                    className: 'tw-text-white',
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => setSecurePassword(!securePassword)}
+                      >
+                        <FontAwesomeIcon
+                          onClick={() => setSecurePassword(!securePassword)}
+                          size="xs"
+                          icon={securePassword ? faEyeSlash : faEye}
+                        />
+                      </IconButton>
+                    ),
                   }}
                 />
               )}
@@ -117,12 +134,12 @@ export const SignIn = () => {
               {alertMessage}
             </Alert>
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12} sm={12}>
             <LoadingButton
               disabled={!isValid || !isDirty}
               size="large"
               variant="contained"
-              className="tw-w-3/4 tw-font-bold tw-mb-12"
+              className="tw-w-3/4 tw-font-bold xs:tw-mb-4 md:tw-mb-6"
               disableElevation
               type="submit"
               loading={loading}
@@ -130,7 +147,7 @@ export const SignIn = () => {
               Continue
             </LoadingButton>
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12} sm={12}>
             <Link to="/auth/register">
               <Button>Register now</Button>
             </Link>

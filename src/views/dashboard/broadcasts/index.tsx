@@ -36,7 +36,7 @@ export const Broadcast = () => {
 
   return (
     <Container maxWidth="xxl" className="tw-flex tw-h-full" disableGutters>
-      <Box className="tw-w-56">
+      <Box className="tw-hidden md:tw-block tw-w-56">
         <List className="tw-py-0">
           {links.map((link) => (
             <ListItemButton
@@ -53,7 +53,7 @@ export const Broadcast = () => {
           ))}
         </List>
       </Box>
-      <Divider orientation="vertical" />
+      <Divider className="tw-hidden md:tw-block" orientation="vertical" />
       <Box className="tw-flex-1 tw-overflow-y-auto">
         <Outlet />
       </Box>
