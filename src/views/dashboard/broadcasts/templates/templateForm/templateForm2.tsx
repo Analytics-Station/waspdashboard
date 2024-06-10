@@ -1,4 +1,11 @@
-import { faCaretDown, faClose, faDesktop, faLightbulb, faPlus, faReply } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCaretDown,
+  faClose,
+  faDesktop,
+  faLightbulb,
+  faPlus,
+  faReply,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -124,6 +131,10 @@ export const TemplateForm2 = ({ saveClicked, formData }: Props) => {
           obj['type'] = 'PHONE_NUMBER';
           obj['phone_number'] = button.footerText;
         }
+        payload.push(obj);
+      } else {
+        obj['type'] = 'QUICK_REPLY';
+        obj['text'] = button.buttonText;
         payload.push(obj);
       }
     });
