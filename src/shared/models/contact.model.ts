@@ -1,3 +1,4 @@
+import { ContactGroup } from './contact-group.model';
 import { PaginationMeta } from './pagination.model';
 
 export class Contact {
@@ -14,6 +15,11 @@ export class Contact {
     this.broadcast = data.broadcast != null ? data.broadcast : null;
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
   }
+}
+
+export interface CreateContactRequest {
+  contacts: any[];
+  contactGroupId?: number;
 }
 
 export class ContactResponse {
@@ -48,5 +54,15 @@ export class AssignedContact extends Contact {
     super(data);
     this.isAssigned = data.isAssigned != null ? data.isAssigned : false;
     this.updatedValue = data.updatedValue != null ? data.updatedValue : false;
+  }
+}
+
+export class BulkImportFormData {
+  public contactGroups: ContactGroup[];
+
+  constructor(data: any) {
+    this.contactGroups = data.contactGroups
+      ? data.contactGroups.map((item: any) => new ContactGroup(item))
+      : [];
   }
 }
